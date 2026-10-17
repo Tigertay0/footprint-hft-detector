@@ -1,0 +1,193 @@
+{
+  "config": {
+    "SOURCE": "yfinance",
+    "TICKER": "TSLA",
+    "DAYS": 29,
+    "ALPACA_KEY": "",
+    "ALPACA_SECRET": "",
+    "VOL_WINDOW": 20,
+    "RET_WINDOW": 60,
+    "MOVE_BARS": 3,
+    "REVERT_BARS": 5,
+    "IMB_WINDOW": 5,
+    "VOL_Z_RULE": 2.5,
+    "REVERSION_RULE": 0.5,
+    "IMBALANCE_RULE": 0.6,
+    "CONFIRM_REVERSION": 0.35,
+    "TRAIN_FRACTION": 0.6,
+    "CONTAMINATION": 0.01,
+    "MODEL_WEIGHT": 0.6,
+    "RULE_WEIGHT": 0.4,
+    "ELEVATED": 50,
+    "HIGH": 70
+  },
+  "sensitivity_gate_cutoff": {
+    "40": {
+      "0.9": 10.77,
+      "0.95": 6.62,
+      "0.99": 1.76
+    },
+    "50": {
+      "0.9": 8.2,
+      "0.95": 4.92,
+      "0.99": 1.35
+    },
+    "60": {
+      "0.9": 5.64,
+      "0.95": 3.44,
+      "0.99": 1.12
+    }
+  },
+  "contamination": {
+    "0.005": {
+      "model_flag_minutes": 266,
+      "episodes_per_day": 4.925
+    },
+    "0.01": {
+      "model_flag_minutes": 536,
+      "episodes_per_day": 4.925
+    },
+    "0.02": {
+      "model_flag_minutes": 1128,
+      "episodes_per_day": 4.925
+    }
+  },
+  "ablation_real_episodes_per_stock_day": {
+    "rules_only": 2.72,
+    "forest_only": 2.79,
+    "combined": 4.92
+  },
+  "planted_event_control": [
+    {
+      "method": "Rules only (2 of 3)",
+      "events": 800,
+      "recall": 0.69,
+      "alert_episodes": 870,
+      "precision_planted_only": 0.6425436781609196
+    },
+    {
+      "method": "Isolation Forest only",
+      "events": 800,
+      "recall": 0.615,
+      "alert_episodes": 775,
+      "precision_planted_only": 0.6387858064516129
+    },
+    {
+      "method": "Hybrid risk score",
+      "events": 800,
+      "recall": 0.78,
+      "alert_episodes": 1153,
+      "precision_planted_only": 0.5499731136166522
+    }
+  ],
+  "observed": {
+    "group": "original 20 tickers",
+    "tickers": 20,
+    "episodes": 788,
+    "test_days": 8,
+    "episodes_per_stock_day": 4.925,
+    "reversal_share": 0.1548223350253807,
+    "market_wide_share": 0.28045685279187815,
+    "stock_specific_reversals_per_stock_day": 0.4,
+    "episodes_per_stock_day_ci95": [
+      4.625,
+      5.19375
+    ],
+    "reversal_share_ci95": [
+      0.11517031118587048,
+      0.19216305135030398
+    ],
+    "market_wide_share_ci95": [
+      0.21721854304635763,
+      0.33127317676143386
+    ]
+  },
+  "episodes_by_day": {
+    "2026-10-07": 95,
+    "2026-10-08": 104,
+    "2026-10-09": 104,
+    "2026-10-12": 87,
+    "2026-10-13": 112,
+    "2026-10-14": 99,
+    "2026-10-15": 86,
+    "2026-10-16": 101
+  },
+  "null_shuffle_block_1": {
+    "group": "shuffled bars, block=1",
+    "tickers": 20,
+    "episodes": 786,
+    "test_days": 8,
+    "episodes_per_stock_day": 4.9125,
+    "reversal_share": 0.15776081424936386,
+    "market_wide_share": 0.13740458015267176,
+    "stock_specific_reversals_per_stock_day": 0.6625,
+    "episodes_per_stock_day_ci95": [
+      4.6875,
+      5.14375
+    ],
+    "reversal_share_ci95": [
+      0.1286030931933842,
+      0.18773946360153257
+    ],
+    "market_wide_share_ci95": [
+      0.11398963730569948,
+      0.15809768637532134
+    ]
+  },
+  "null_shuffle_block_10": {
+    "group": "shuffled bars, block=10",
+    "tickers": 20,
+    "episodes": 767,
+    "test_days": 8,
+    "episodes_per_stock_day": 4.79375,
+    "reversal_share": 0.2777053455019557,
+    "market_wide_share": 0.15514993481095177,
+    "stock_specific_reversals_per_stock_day": 1.10625,
+    "episodes_per_stock_day_ci95": [
+      4.6875,
+      4.8875
+    ],
+    "reversal_share_ci95": [
+      0.24195624195624196,
+      0.3155844155844156
+    ],
+    "market_wide_share_ci95": [
+      0.1276595744680851,
+      0.18123641816623817
+    ]
+  },
+  "market_wide_shift_null": {
+    "observed_share": 0.28045685279187815,
+    "null_mean": 0.06751269035532995,
+    "null_95_interval": [
+      0.03807106598984772,
+      0.09584390862944159
+    ],
+    "draws": 300
+  },
+  "comparison": {
+    "group": "20 lower-volatility large caps",
+    "tickers": 20,
+    "episodes": 806,
+    "test_days": 8,
+    "episodes_per_stock_day": 5.0375,
+    "reversal_share": 0.1228287841191067,
+    "market_wide_share": 0.20595533498759305,
+    "stock_specific_reversals_per_stock_day": 0.475,
+    "episodes_per_stock_day_ci95": [
+      4.64359375,
+      5.4625
+    ],
+    "reversal_share_ci95": [
+      0.11310344827586206,
+      0.13333333333333333
+    ],
+    "market_wide_share_ci95": [
+      0.11817842605156038,
+      0.29118329466357307
+    ],
+    "sessions_per_ticker": [
+      20
+    ]
+  }
+}
