@@ -1,0 +1,22 @@
+{
+  "SOURCE": "yfinance",
+  "TICKER": "TSLA",
+  "DAYS": 29,
+  "ALPACA_KEY": "",
+  "ALPACA_SECRET": "",
+  "VOL_WINDOW": 20,
+  "RET_WINDOW": 60,
+  "MOVE_BARS": 3,
+  "REVERT_BARS": 5,
+  "IMB_WINDOW": 5,
+  "VOL_Z_RULE": 2.5,
+  "REVERSION_RULE": 0.5,
+  "IMBALANCE_RULE": 0.6,
+  "CONFIRM_REVERSION": 0.35,
+  "TRAIN_FRACTION": 0.6,
+  "CONTAMINATION": 0.01,
+  "MODEL_WEIGHT": 0.6,
+  "RULE_WEIGHT": 0.4,
+  "ELEVATED": 50,
+  "HIGH": 70
+}
