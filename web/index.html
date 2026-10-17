@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Footprint HFT detector</title>
+  <meta name="description" content="Scan minute-by-minute stock data for patterns consistent with high-frequency trading, with every flag explained in plain English.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/fonts/schibsted-grotesk/schibsted-grotesk-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="topbar">
+    <div class="wrap topbar__in">
+      <a class="brand" href="#/scan"><span class="brand__name">Footprint</span><span class="brand__sub">HFT detector</span></a>
+      <nav aria-label="Main">
+        <ul class="tabs">
+          <li><a data-route="scan" href="#/scan">Scan</a></li>
+          <li><a data-route="replay" href="#/replay">Replay</a></li>
+          <li><a data-route="alerts" href="#/alerts">Alerts</a></li>
+          <li><a data-route="accuracy" href="#/accuracy">Accuracy</a></li>
+          <li><a data-route="guide" href="#/guide">Guide</a></li>
+        </ul>
+      </nav>
+      <button class="icon-btn" id="theme" type="button" aria-label="Switch to dark theme"></button>
+    </div>
+  </header>
+  <main id="main" class="wrap" tabindex="-1"></main>
+  <footer class="wrap foot"><p>A research tool for studying trading patterns. Not investment advice.</p></footer>
+  <script type="module" src="/js/main.js"></script>
+</body>
+</html>

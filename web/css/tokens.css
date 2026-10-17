@@ -1,0 +1,95 @@
+/* Design tokens for Footprint. Components use these names, never raw values.
+   Strategy: restrained. Neutrals plus color that only ever means risk (amber = elevated, red = high). */
+
+/* Schibsted Grotesk, SIL Open Font License 1.1. Source: https://fontesk.com/schibsted-grotesk-typeface/ */
+@font-face {
+  font-family: "Schibsted Grotesk";
+  src: url("/fonts/schibsted-grotesk/schibsted-grotesk-variable.woff2") format("woff2");
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Metric-matched fallback so text does not jump when the font arrives. */
+@font-face {
+  font-family: "Schibsted Grotesk Fallback";
+  src: local("Arial");
+  size-adjust: 101%;
+  ascent-override: 93%;
+  descent-override: 24%;
+  line-gap-override: 0%;
+}
+
+:root {
+  color-scheme: light;
+
+  --font: "Schibsted Grotesk", "Schibsted Grotesk Fallback", system-ui, sans-serif;
+
+  /* Neutral family: cool, one hue */
+  --ground: #ECEFF3;
+  --surface: #F7F8FA;
+  --sunken: #E1E6EC;
+  --ink: #11161D;
+  --ink-2: #3D4856;
+  --ink-3: #566271;
+  --line: rgba(17, 22, 29, 0.13);
+  --line-strong: rgba(17, 22, 29, 0.32);
+  --bar: #7A8697;
+  --on-ink: #F2F4F7;
+  --shadow: rgba(23, 33, 48, 0.16);
+
+  /* Risk colors. Marks are saturated, text pairs use the darker -ink value on the -tint fill. */
+  --elevated: #B87200;
+  --elevated-ink: #5C3A00;
+  --elevated-tint: #F5E3B8;
+  --high: #CC3524;
+  --high-ink: #7A1B0E;
+  --high-tint: #F5D2CA;
+
+  /* Type scale (role: size / line-height) */
+  --text-display: clamp(1.75rem, 1.15rem + 1.7vw, 2.75rem);
+  --text-h2: 1.1875rem;
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --text-label: 0.8125rem;
+
+  /* Space: 4/8 scale */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 64px;
+
+  /* Shape lock: controls 8, panels 12, pills full */
+  --r-ctl: 8px;
+  --r-panel: 12px;
+  --r-pill: 999px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --t-press: 120ms;
+  --t-fast: 160ms;
+  --t-med: 240ms;
+
+  /* Layers */
+  --z-sticky: 10;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ground: #0E1217;
+  --surface: #151A21;
+  --sunken: #1E252E;
+  --ink: #E7EBF1;
+  --ink-2: #B4BDCA;
+  --ink-3: #96A2B2;
+  --line: rgba(231, 235, 241, 0.14);
+  --line-strong: rgba(231, 235, 241, 0.34);
+  --bar: #6F7C8E;
+  --on-ink: #11161D;
+  --shadow: rgba(0, 0, 0, 0.45);
+
+  --elevated: #E5A93B;
+  --elevated-ink: #F2CB78;
+  --elevated-tint: rgba(229, 169, 59, 0.16);
+  --high: #EE6F5E;
+  --high-ink: #F7A094;
+  --high-tint: rgba(238, 111, 94, 0.17);
+}

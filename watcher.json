@@ -1,0 +1,9 @@
+{
+  "tickers": ["TSLA", "AAPL", "NVDA"],
+  "sensitivity": "balanced",
+  "poll_seconds": 20,
+  "history_days": 10,
+  "notify_cleared": true,
+  "daily_summary": true,
+  "max_alerts_per_hour": 20
+}

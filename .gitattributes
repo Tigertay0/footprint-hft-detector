@@ -1,0 +1,6 @@
+# Windows scripts must keep Windows line endings, including in GitHub's Download ZIP.
+* text=auto
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+*.woff2 binary
+*.zip binary
