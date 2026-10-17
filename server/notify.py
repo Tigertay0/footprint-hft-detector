@@ -9,11 +9,14 @@ import http.client
 import ipaddress
 import json
 import logging
+import os
+import re
 import time
 import urllib.error
 import urllib.request
 from collections.abc import Callable
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Protocol
 from urllib.parse import urlparse
 
@@ -37,9 +40,10 @@ def _retry_after(exc: urllib.error.HTTPError) -> float:
 
 
 def _error_text(exc: urllib.error.HTTPError) -> str:
-    """The server's own explanation (for example 'topic not found'), shortened. It never contains our topic."""
+    """The server's own explanation (for example 'topic not found'), shortened. It never contains our topic.
+    Control characters are blanked so the reply cannot forge or garble log lines."""
     try:
-        return exc.read(300).decode("utf-8", "replace").replace("\n", " ")
+        return re.sub(r"[\x00-\x1f\x7f]+", " ", exc.read(300).decode("utf-8", "replace"))
     except Exception:                                  # noqa: BLE001 - the body is only a log aid
         return "(no details)"
 
@@ -83,7 +87,7 @@ class NtfyNotifier:
                  timeout: float = 10.0, retries: int = 3, backoff: float = 2.0,
                  opener: Callable[..., object] = _open_without_redirects,
                  sleep: Callable[[float], None] = time.sleep) -> None:
-        if not NTFY_TOPIC_PATTERN.match(topic or ""):
+        if not NTFY_TOPIC_PATTERN.fullmatch(topic or ""):
             raise UserError("The ntfy topic must be 16 to 64 letters, digits, dashes or underscores.")
         parsed = urlparse(server)
         if parsed.scheme not in ("http", "https") or not parsed.netloc:
@@ -143,3 +147,25 @@ class DryRunNotifier:
     def send(self, message: Message) -> bool:
         self._out(f"[dry run] priority {message.priority} | {message.title}\n{message.body}\n")
         return True
+
+
+def load_env_file(path: Path) -> dict[str, str]:
+    """watcher.env: KEY=VALUE lines, # comments allowed. Real NTFY_* environment variables take precedence.
+    Kept here (standard library only) so the supervisor reads the file exactly as the watcher does."""
+    values: dict[str, str] = {}
+    if path.exists():
+        try:
+            text = path.read_text(encoding="utf-8-sig")
+        except UnicodeDecodeError:
+            raise UserError(f"{path.name} must be saved as plain text (UTF-8 or ASCII).") from None
+        for line in text.splitlines():
+            line = line.strip()
+            if line and not line.startswith("#") and "=" in line:
+                key, _, value = line.partition("=")
+                values[key.strip()] = value.strip().strip("\"'")
+    return {**values, **{k: v for k, v in os.environ.items() if k.startswith("NTFY_")}}
+
+
+def notifier_from_env(env: dict[str, str]) -> NtfyNotifier:
+    """The ntfy sender described by watcher.env. Raises UserError if a setting is invalid."""
+    return NtfyNotifier(env.get("NTFY_TOPIC", ""), env.get("NTFY_SERVER", DEFAULT_SERVER), env.get("NTFY_TOKEN") or None)

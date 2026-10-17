@@ -38,6 +38,7 @@ The detection logic is untouched. These are the differences:
 - Every function takes its settings as an argument instead of reading a global `CONFIG`, so each request can use its own thresholds.
 - The CSV loader accepts an uploaded file, and replay results come back as data instead of printed text.
 - `replay_evaluation` and the method comparison return numbers for the page instead of printing.
+- The market-open check knows NYSE holidays and half days, so live watching is not offered on those days.
 - The Alpaca loader is kept in `engine.py` but is not connected to the interface (it would need API keys typed into a web page).
 
 ## Layout
@@ -48,6 +49,7 @@ server/analysis.py   reshapes results into JSON for the page
 server/jobs.py       background jobs: replay, accuracy test, live monitoring
 server/main.py       FastAPI app and API routes, serves web/
 server/watcher.py    always-on watcher: watchlist, market hours, notifications
+server/market_hours.py  NYSE calendar (holidays, half days), shared by the app and the watcher
 server/notify.py     ntfy sender (retries, never logs the topic)
 server/store.py      alert history and watcher heartbeat (SQLite)
 install-watcher.ps1  one-time setup on the NUC (topic, test message, startup task)
@@ -71,7 +73,7 @@ Set up (about 10 minutes):
 1. Copy this folder to the NUC, somewhere short such as `C:\hft-detector`. Leave out `.venv`.
 2. Install Python 3.10 or newer on the NUC (tick "Add python.exe to PATH").
 3. Open `watcher.json` and list your tickers (up to 25).
-4. Right-click `install-watcher.ps1`, choose Run with PowerShell, and accept the administrator prompt. It sets up Python, saves your private topic in `watcher.env`, sends a test notification, and registers a startup task that restarts the watcher if it stops.
+4. Right-click `install-watcher.ps1` and choose Run with PowerShell. It sets up Python, saves your private topic in `watcher.env`, sends a test notification, and registers a startup task that restarts the watcher if it stops. Accept the administrator prompt at the last step: only the startup task needs it.
 5. On your phone, install the free ntfy app and subscribe to the topic the script shows. In the app, let the urgent channel override Do Not Disturb if you want confirmed alerts at night.
 
 The market runs 9:30 to 16:00 New York time, which is 19:00 to 01:30 in India until early November, then 20:00 to 02:30. The watcher sleeps outside those hours and on US market holidays, trains on each ticker's last sessions at 9:15 New York time, and saves every alert to `data/alerts.db` (shown in the Alerts tab).

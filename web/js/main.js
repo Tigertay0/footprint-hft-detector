@@ -46,15 +46,16 @@ function show({ moveFocus }) {
   if (cleanup) {
     try {
       cleanup();
-    } catch {
-      // A view that fails while closing must not stop the next one from opening.
+    } catch (error) {
+      console.error(error); // A view that fails while closing must not stop the next one from opening.
     }
     cleanup = null;
   }
   clear(main);
   try {
     cleanup = route.mount(main, { store, navigate: (to) => { location.hash = `#/${to}`; } }) || null;
-  } catch {
+  } catch (error) {
+    console.error(error);
     clear(main).append(h("div", { class: "scan" }, h("div", { class: "notice", role: "alert" },
       h("p", { class: "notice__text" }, "This page could not be shown. Reload it, or open another tab."))));
   }

@@ -73,7 +73,10 @@ export function mountAccuracy(root, ctx) {
 
   function onUpdate(p) {
     if (disposed) return;
-    if (p.status === "error") return fail(p.error);
+    if (p.status === "error") {
+      if (jobId) api.stopJob(jobId); // polling may have given up while the test still runs on the server
+      return fail(p.error);
+    }
     const key = p.result ? JSON.stringify(p.result) : "";
     if (p.result && key !== renderedKey) {
       renderedKey = key;

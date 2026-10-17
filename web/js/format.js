@@ -40,6 +40,8 @@ export function plural(n, one, many = `${one}s`) {
   return `${n} ${n === 1 ? one : many}`;
 }
 
+export const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
 /** One full sentence for a single reason, in the notebook's own wording. */
 export function reasonSentence(reason) {
   switch (reason.kind) {

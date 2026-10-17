@@ -1,11 +1,10 @@
 import { h, clear, segmented } from "../dom.js";
 import { api } from "../api.js";
 import { verdict, episodeHeadline, etClock } from "../format.js";
-import { sessionStrip, chartPanel, alertFeed } from "./scan-parts.js";
+import { sessionStrip, chartPanel, alertFeed, zoomWindow } from "./scan-parts.js";
 
 const TICKER_PATTERN = /^[A-Za-z0-9^][A-Za-z0-9.\-=]{0,11}$/;
 const TICKER_RULE = "Use 1 to 12 letters or digits, starting with a letter or digit. . - ^ = are allowed after that.";
-const ZOOM_PADDING_MIN = 25;
 const WINDOWS = [{ value: "14", label: "2 weeks" }, { value: "29", label: "4 weeks" }];
 const SOURCES = [
   { value: "market", label: "Market data" },
@@ -134,7 +133,9 @@ export function mountScan(root, ctx) {
     } catch (error) {
       if (disposed || mine !== seq) return;
       showNotice(error.message, request.source === "market");
-      if (!rescan) clear(out);
+      if (rescan) resetFeed();              // the alert-level control already moved, so put it back
+      else if (store.scan) renderResults(); // keep showing the scan that Replay and Accuracy still use
+      else clear(out);
       status.textContent = "The scan did not finish.";
       noticeSlot.querySelector(".notice")?.focus();
     } finally {
@@ -221,6 +222,12 @@ export function mountScan(root, ctx) {
     });
   }
 
+  function resetFeed() {
+    const nextFeed = buildFeed();
+    feed.replaceWith(nextFeed);
+    feed = nextFeed;
+  }
+
   function refresh(animate) {
     const active = document.activeElement?.dataset ?? {};
     const nextStrip = sessionStrip(store.scan, store.selectedDate, pickDay);
@@ -252,11 +259,12 @@ export function mountScan(root, ctx) {
     if (!ep) return;
     const closing = store.selectedEpisode === id;
     const sameDay = store.selectedDate === ep.date;
+    const [from, to] = zoomWindow(ep);
     store.selectedEpisode = closing ? null : id;
     store.selectedDate = ep.date;
     status.textContent = closing
       ? "Showing the full session."
-      : `${episodeHeadline(ep)}. Chart zoomed to ${etClock(ep.open_ms, Math.max(0, ep.start_m - ZOOM_PADDING_MIN))} to ${etClock(ep.open_ms, Math.min(390, ep.end_m + ZOOM_PADDING_MIN))} ET.`;
+      : `${episodeHeadline(ep)}. Chart zoomed to ${etClock(ep.open_ms, from)} to ${etClock(ep.open_ms, to)} ET.`;
     refresh(sameDay);
   }
 

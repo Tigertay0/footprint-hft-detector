@@ -23,9 +23,17 @@ if not exist ".venv\Scripts\python.exe" (
 if not defined NO_BROWSER start "" cmd /c "timeout /t 3 /nobreak >nul & start http://127.0.0.1:%PORT%"
 echo Footprint is running at http://127.0.0.1:%PORT%  (close this window to stop it)
 ".venv\Scripts\python.exe" -m uvicorn main:app --app-dir server --host %HOST% --port %PORT%
+if errorlevel 1 (
+  echo.
+  echo Footprint stopped with an error. Read the messages above. If the port is in use, close the other copy first.
+  pause
+  exit /b 1
+)
 goto :eof
 
 :fail
+rem Only setup steps come here. A half-installed environment would be skipped next time, so start clean then.
+if exist ".venv" rmdir /s /q ".venv"
 echo.
 echo Setup did not finish. Read the messages above, fix the problem, and run this file again.
 pause

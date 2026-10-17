@@ -1,8 +1,9 @@
-// Run with: node --test tests/
+// Run with: node --test tests/format.test.js
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  etClock, dateShort, dateLong, plural, reasonSentence, reasonShort, episodeHeadline, verdict, ruleLine, nearestIndex, etToDate,
+  etClock, dateShort, dateLong, plural, capitalize, reasonSentence, reasonShort, episodeHeadline, verdict, ruleLine, nearestIndex,
+  etToDate,
 } from "../web/js/format.js";
 
 const OPEN_MS_EDT = Date.UTC(2026, 9, 12, 13, 30); // 9:30 New York on 12 Oct 2026 (daylight time)
@@ -21,6 +22,11 @@ test("dates are formatted without timezone drift", () => {
 test("plural", () => {
   assert.equal(plural(1, "session"), "1 session");
   assert.equal(plural(21, "session"), "21 sessions");
+});
+
+test("capitalize only touches the first letter", () => {
+  assert.equal(capitalize("the move held. TSLA"), "The move held. TSLA");
+  assert.equal(capitalize(""), "");
 });
 
 test("reason sentences use the notebook wording", () => {

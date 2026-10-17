@@ -11,6 +11,6 @@ MAX_WATCHLIST = 25                      # one batched Yahoo request per poll sta
 def normalize_ticker(raw: str) -> str:
     """Upper-case a ticker and check it. Raises UserError for anything Yahoo would not accept as a symbol."""
     ticker = raw.strip().upper()
-    if not TICKER_PATTERN.match(ticker) or ".." in ticker:
+    if not TICKER_PATTERN.fullmatch(ticker) or ".." in ticker:
         raise UserError(f"'{raw.strip()[:20]}' is not a valid ticker. Use letters and digits, such as TSLA or BRK-B.")
     return ticker

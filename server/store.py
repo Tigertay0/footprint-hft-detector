@@ -16,8 +16,10 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 def data_dir() -> Path:
-    """Where the alert history and logs live. Override with FOOTPRINT_DATA_DIR."""
-    return Path(os.environ.get("FOOTPRINT_DATA_DIR") or ROOT / "data")
+    """Where the alert history and logs live. Override with FOOTPRINT_DATA_DIR.
+
+    Always absolute: the web app opens the history through a file: URI, which a relative path cannot form."""
+    return Path(os.environ.get("FOOTPRINT_DATA_DIR") or ROOT / "data").resolve()
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS alerts (
@@ -68,11 +70,14 @@ class AlertStore:
         with self._lock, self._db:
             return self._db.execute("DELETE FROM alerts WHERE created_utc < ?", (cutoff,)).rowcount
 
-    def add_alert(self, ticker: str, kind: str, session_date: str, about_et: str, sent_et: str, text: str) -> int:
+    def add_alert(self, ticker: str, kind: str, session_date: str, about_et: str, sent_et: str, text: str,
+                  *, delivered: bool = False, note: str | None = None) -> int:
+        """Saves one alert together with its delivery outcome, in a single transaction."""
         with self._lock, self._db:
             cur = self._db.execute(
-                "INSERT INTO alerts (created_utc, ticker, kind, session_date, about_et, sent_et, text) VALUES (?,?,?,?,?,?,?)",
-                (_now(), ticker, kind, session_date, about_et, sent_et, text))
+                "INSERT INTO alerts (created_utc, ticker, kind, session_date, about_et, sent_et, text, notified, note) "
+                "VALUES (?,?,?,?,?,?,?,?,?)",
+                (_now(), ticker, kind, session_date, about_et, sent_et, text, int(delivered), note))
             return int(cur.lastrowid)
 
     def has_alert(self, ticker: str, kind: str, session_date: str, about_et: str) -> bool:

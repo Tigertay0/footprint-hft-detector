@@ -1,6 +1,6 @@
 import { h, clear } from "../dom.js";
 import { api } from "../api.js";
-import { dateLong, plural } from "../format.js";
+import { capitalize, dateLong, plural } from "../format.js";
 
 const REFRESH_MS = 30000;
 const KIND = {
@@ -9,8 +9,6 @@ const KIND = {
   ALERT: { label: "Confirmed", cls: "high" },
   CLEARED: { label: "Cleared", cls: "neutral" },
 };
-
-const upper = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
 function delivery(row) {
   if (row.notified) return null;
@@ -34,6 +32,7 @@ function statusLine(w) {
 export function mountAlerts(root) {
   let disposed = false;
   let timer = 0;
+  let requestSeq = 0;
   let ticker = "";
   let knownTickers = [];
   const status = h("p", { class: "summary" }, "Checking the watcher...");
@@ -51,7 +50,8 @@ export function mountAlerts(root) {
     errorSlot, note, list));
 
   function fillSelect(tickers) {
-    const next = [...new Set([...tickers])].sort();
+    // Keep every ticker seen so far: a filtered history names only one, and the chosen one must stay selectable.
+    const next = [...new Set([...knownTickers, ...tickers, ticker].filter(Boolean))].sort();
     if (next.join() === knownTickers.join()) return;
     knownTickers = next;
     clear(select).append(h("option", { value: "" }, "All tickers"),
@@ -66,14 +66,15 @@ export function mountAlerts(root) {
         h("span", { class: `pill pill--${kind.cls}` }, kind.label),
         h("strong", {}, a.ticker),
         h("span", { class: "msg__time" }, `${dateLong(a.session_date)}, ${a.sent_et} ET, about ${a.about_et}`)),
-      h("p", { class: "msg__text" }, upper(a.text)),
+      h("p", { class: "msg__text" }, capitalize(a.text)),
       problem ? h("p", { class: "hint" }, problem) : null);
   }
 
   async function load() {
+    const mine = ++requestSeq;
     try {
       const [watcher, history] = await Promise.all([api.watcher(), api.alerts(ticker)]);
-      if (disposed) return;
+      if (disposed || mine !== requestSeq) return; // a newer request (another ticker, or the timer) owns the page
       errorSlot.replaceChildren();
       const line = statusLine(watcher);
       status.textContent = line.text;
@@ -84,8 +85,10 @@ export function mountAlerts(root) {
         ? `Showing the latest ${plural(history.alerts.length, "alert")}. This list refreshes every 30 seconds.`
         : "No alerts yet. Quiet is normal: an alert needs a volume burst, a sharp push or one-sided flow to stand out.";
     } catch (error) {
-      if (disposed) return;
+      if (disposed || mine !== requestSeq) return;
       errorSlot.replaceChildren(h("div", { class: "notice", tabindex: "-1" }, h("p", { class: "notice__text" }, error.message)));
+      status.textContent = "The watcher's status could not be checked. The list below may be out of date.";
+      status.classList.add("summary--bad");
     }
   }
 

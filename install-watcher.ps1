@@ -7,7 +7,10 @@
 #   3. saves your private ntfy topic (alerts go to the phone app subscribed to that topic)
 #   4. sends a test notification
 #   5. registers a task that starts the watcher at boot and restarts it if it stops
-param([switch]$NoTask)   # -NoTask: do steps 1 to 4 only
+param(
+    [switch]$NoTask,        # -NoTask: do steps 1 to 4 only
+    [string]$TaskUser       # used internally: the elevated copy that only registers the task for this user
+)
 
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSCommandPath
@@ -15,16 +18,32 @@ $taskName = "FootprintWatcher"
 
 $me = [Security.Principal.WindowsIdentity]::GetCurrent()
 $isAdmin = ([Security.Principal.WindowsPrincipal]$me).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-if (-not $isAdmin -and -not $NoTask) {
-    Start-Process powershell -Verb RunAs -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`""
-    exit
-}
 
 function Step($n, $text) { Write-Host "`nStep $n of 5: $text" -ForegroundColor Cyan }
 function Warn($text) { Write-Host $text -ForegroundColor Yellow }
 function Fail($text) { Write-Host "`n$text" -ForegroundColor Red; Read-Host "Press Enter to close"; exit 1 }
+# Any error not handled below lands here, so the window stays open long enough to read what went wrong.
+trap { Fail "Setup stopped: $($_.Exception.Message)" }
 
 Set-Location $root
+
+function Register-WatcherTask($user) {
+    # Runs as the signed-in user with normal rights (S4U: no password stored, works before anyone logs in).
+    # Nothing here runs as an administrator or as SYSTEM, so a program running as you cannot use this task to gain more rights.
+    $action = New-ScheduledTaskAction -Execute "$root\run-watcher.bat" -WorkingDirectory $root
+    $trigger = New-ScheduledTaskTrigger -AtStartup
+    $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries `
+        -RestartCount 999 -RestartInterval (New-TimeSpan -Minutes 1) -ExecutionTimeLimit ([TimeSpan]::Zero) -MultipleInstances IgnoreNew
+    $principal = New-ScheduledTaskPrincipal -UserId $user -LogonType S4U -RunLevel Limited
+    Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Settings $settings -Principal $principal -Force | Out-Null
+    Start-ScheduledTask -TaskName $taskName
+}
+
+if ($TaskUser) {
+    # The elevated copy started in step 5. Only registering the task needs administrator rights, so it does nothing else.
+    Register-WatcherTask $TaskUser
+    exit 0
+}
 
 # ------------------------------------------------------------ 1. This PC
 Step 1 "Checking this PC"
@@ -51,13 +70,20 @@ if (-not (Test-Path ".venv\Scripts\python.exe")) {
     $pythonVersion = 0
     try { $pythonVersion = [int](& python -c "import sys; print(sys.version_info[0] * 100 + sys.version_info[1])" 2>$null) } catch { $pythonVersion = 0 }
     if ($pythonVersion -lt 310) { Fail "Python 3.10 or newer is needed. Install it from https://www.python.org/downloads/ (tick 'Add python.exe to PATH') and run this again." }
+    # Native commands do not stop the script when they fail, so each exit code is checked.
     python -m venv .venv
+    if ($LASTEXITCODE -ne 0) { Fail "The Python environment could not be created. Read the messages above, then run this again." }
     & .\.venv\Scripts\python.exe -m pip install --quiet --upgrade pip
-    & .\.venv\Scripts\python.exe -m pip install --quiet -r requirements.txt
+    if ($LASTEXITCODE -eq 0) { & .\.venv\Scripts\python.exe -m pip install --quiet -r requirements.txt }
+    if ($LASTEXITCODE -ne 0) {
+        # A half-installed environment would be skipped on the next run, so remove it and start clean then.
+        Remove-Item -Recurse -Force ".venv" -ErrorAction SilentlyContinue
+        Fail "The Python packages did not install. Check the internet connection and the messages above, then run this again."
+    }
 }
 Write-Host "Ready."
 
-# ------------------------------------------------------------ 2. ntfy topic
+# ------------------------------------------------------------ 3. ntfy topic
 Step 3 "Your private alert topic"
 $envFile = Join-Path $root "watcher.env"
 $existing = @(); if (Test-Path $envFile) { $existing = @(Get-Content $envFile) }
@@ -80,6 +106,7 @@ if ($haveTopic) {
     # Lock the file down first, then write the secret into it. Other settings in the file are kept.
     if (-not (Test-Path $envFile)) { New-Item -ItemType File -Path $envFile | Out-Null }
     icacls $envFile /inheritance:r /grant:r "*$($me.User.Value):(R,W)" "*S-1-5-18:(R)" "*S-1-5-32-544:(F)" | Out-Null
+    if ($LASTEXITCODE -ne 0) { Fail "Could not limit who can read watcher.env, so the topic was not saved. Run this again." }
     $kept = $existing | Where-Object { $_ -notmatch "^NTFY_TOPIC=" }
     Set-Content -Path $envFile -Value (@($kept) + "NTFY_TOPIC=$plain") -Encoding ascii
     if ($generated) { Write-Host "`nYour topic is: $plain" -ForegroundColor Yellow }
@@ -87,7 +114,7 @@ if ($haveTopic) {
     Read-Host "Press Enter when you have subscribed"
 }
 
-# ------------------------------------------------------------ 3. test notification
+# ------------------------------------------------------------ 4. test notification
 Step 4 "Test notification"
 & .\.venv\Scripts\python.exe server\watcher.py --test-notify
 if ($LASTEXITCODE -ne 0) { Fail "The test did not go through. Check the internet connection and the topic in watcher.env, then run this again." }
@@ -96,24 +123,24 @@ if ($ok -notmatch "^[yY]") { Fail "Check that the topic in the ntfy app matches 
 
 if ($NoTask) { Write-Host "`nDone (no startup task, as requested)." -ForegroundColor Green; Read-Host "Press Enter to close"; exit 0 }
 
-# ------------------------------------------------------------ 4. startup task
+# ------------------------------------------------------------ 5. startup task
 Step 5 "Start at boot and restart if it stops"
-# Runs as the signed-in user with normal rights (S4U: no password stored, works before anyone logs in).
-# Nothing here runs as an administrator or as SYSTEM, so a program running as you cannot use this task to gain more rights.
-$action = New-ScheduledTaskAction -Execute "$root\run-watcher.bat" -WorkingDirectory $root
-$trigger = New-ScheduledTaskTrigger -AtStartup
-$settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries `
-    -RestartCount 999 -RestartInterval (New-TimeSpan -Minutes 1) -ExecutionTimeLimit ([TimeSpan]::Zero) -MultipleInstances IgnoreNew
-$principal = New-ScheduledTaskPrincipal -UserId $me.Name -LogonType S4U -RunLevel Limited
-Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Settings $settings -Principal $principal -Force | Out-Null
-Start-ScheduledTask -TaskName $taskName
+if ($isAdmin) {
+    Register-WatcherTask $me.Name
+} else {
+    # Steps 1 to 4 (Python, pip, the watcher) ran with normal rights. Only the task registration is elevated.
+    Write-Host "Windows now asks for administrator approval, only to register the startup task."
+    $elevated = Start-Process powershell -Verb RunAs -Wait -PassThru `
+        -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`" -TaskUser `"$($me.Name)`""
+    if ($elevated.ExitCode -ne 0) { Fail "The startup task was not registered. Run this again and accept the administrator prompt." }
+}
 Write-Host "The watcher is running as the task '$taskName' (as $($me.Name))."
 
 $sleep = Read-Host "`nTurn off sleep while plugged in, so the PC keeps watching? (y/n)"
 if ($sleep -match "^[yY]") {
     powercfg /change standby-timeout-ac 0
-    powercfg /change hibernate-timeout-ac 0
-    Write-Host "Sleep is off while plugged in."
+    if ($LASTEXITCODE -eq 0) { powercfg /change hibernate-timeout-ac 0 }
+    if ($LASTEXITCODE -eq 0) { Write-Host "Sleep is off while plugged in." } else { Warn "Could not change the sleep setting. Turn sleep off in Settings > System > Power, or the PC stops watching when it sleeps." }
 } else {
     Write-Host "Left as is. If the PC sleeps, it stops watching."
 }
