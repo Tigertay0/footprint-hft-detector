@@ -19,7 +19,7 @@ from errors import UserError
 
 MIN_SESSIONS = 5
 MIN_FEATURE_ROWS = 200
-MIN_BARS_PER_SESSION = 91     # the planted-event test needs 70 bars before and 20 after a placement
+MIN_BARS_PER_SESSION = 92     # the planted-event test places events 70 or more bars after the open and 21 or more before the close
 
 # Alert threshold pairs (ELEVATED, HIGH). "balanced" is the notebook's own setting.
 SENSITIVITY: dict[str, tuple[int, int]] = {

@@ -1,7 +1,7 @@
 import { h, icon, clear, segmented, prefersReducedMotion } from "../dom.js";
 import { api, pollJob } from "../api.js";
 import { SessionChart } from "../chart.js";
-import { dateLong, etClock, etToDate, plural } from "../format.js";
+import { capitalize, dateLong, etClock, etToDate, plural } from "../format.js";
 
 const MIN_HISTORY_SESSIONS = 3;
 const SPEEDS = { slow: 5, normal: 15, fast: 45 }; // minutes of market time per second
@@ -10,8 +10,6 @@ const REPLAY_POLL_MS = 400;
 const LIVE_POLL_MS = 5000;
 const KIND_LABEL = { "EARLY WARNING": "Early warning", CONFIRMED: "Confirmed", CLEARED: "Cleared", ALERT: "Alert" };
 const KIND_CLASS = { "EARLY WARNING": "elevated", CONFIRMED: "high", ALERT: "high", CLEARED: "neutral" };
-
-const upper = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
 export function mountReplay(root, ctx) {
   const { store, navigate } = ctx;
@@ -34,7 +32,7 @@ export function mountReplay(root, ctx) {
   const s = {
     mode: "planted", runMode: null, date: testDays[0]?.date, speed: "normal", market: null,
     job: null, stopPoll: null, bars: null, events: [], total: 0, computed: 0, cursor: 0, planted: [],
-    playing: false, pendingPlay: false, result: null, raf: 0, last: 0,
+    playing: false, pendingPlay: false, result: null, raf: 0, last: 0, feedState: null,
   };
   const liveTicker = () => (scan.source === "market" ? scan.ticker : store.form.ticker);
 
@@ -149,7 +147,7 @@ export function mountReplay(root, ctx) {
         api.stopJob(id); // the page moved on while the server was starting this job
         return;
       }
-      Object.assign(s, { job: id, runMode: mode, bars: null, events: [], total: 0, computed: 0, cursor: 0, planted: [], result: null });
+      Object.assign(s, { job: id, runMode: mode, bars: null, events: [], total: 0, computed: 0, cursor: 0, planted: [], result: null, feedState: null });
       stage.hidden = false;
       summary.hidden = true;
       clear(feedList);
@@ -190,12 +188,13 @@ export function mountReplay(root, ctx) {
     if (p.status === "done") s.result = p.result;
     if (s.runMode === "live") {
       s.cursor = s.bars?.m.length ?? 0;
-      if (p.status !== "running") {
+      s.feedState = { feedError: p.progress.feed_error, noData: p.progress.no_data, ended: p.status !== "running" };
+      if (s.feedState.ended) {
         stopBtn.hidden = true;
-        status.textContent = "The session ended. The market closed or live watching timed out.";
         announce.textContent = "Live session ended.";
       }
-      s.feedState = { feedError: p.progress.feed_error, noData: p.progress.no_data };
+      // paint() needs bars, and a holiday or a dead feed never sends any. Until training ends, keep the training note.
+      if (!s.bars && (s.feedState.ended || p.progress.trained_on != null)) status.textContent = liveStatus(null);
     }
     scrub.max = String(s.total);
     paint();
@@ -216,7 +215,7 @@ export function mountReplay(root, ctx) {
   }
 
   function resetStage() {
-    Object.assign(s, { runMode: null, bars: null, events: [], total: 0, computed: 0, cursor: 0, planted: [], result: null });
+    Object.assign(s, { runMode: null, bars: null, events: [], total: 0, computed: 0, cursor: 0, planted: [], result: null, feedState: null });
     clear(feedList);
     renderedMessages = 0;
     summary.hidden = true;
@@ -290,9 +289,7 @@ export function mountReplay(root, ctx) {
     scrub.setAttribute("aria-valuetext", `Minute ${shown}, ${at} ET`);
     const waiting = s.playing && s.cursor >= s.computed && s.computed < s.total;
     if (live) {
-      const note = s.feedState?.noData ? " No data has arrived yet. The market may be on a holiday."
-        : s.feedState?.feedError ? " The data feed is having trouble. Retrying." : "";
-      status.textContent = `Live ${liveTicker()}: ${s.bars.m.length} minutes so far, latest ${at} ET. Checking again every minute.${note}`;
+      status.textContent = liveStatus(at);
     } else {
       status.textContent = `Minute ${shown} of ${s.total}, ${at} ET${waiting ? ". Computing the next minutes." : ""}`;
     }
@@ -300,12 +297,21 @@ export function mountReplay(root, ctx) {
     paintSummary(shown);
   }
 
+  /** Status line for a live session. `at` is the latest minute's clock time, or null before any bars arrive. */
+  function liveStatus(at) {
+    if (s.feedState?.ended) return "The session ended. The market closed or live watching timed out.";
+    const note = s.feedState?.noData ? " No data has arrived yet. The market may be on a holiday."
+      : s.feedState?.feedError ? " The data feed is having trouble. Retrying." : "";
+    if (at == null) return `Waiting for the first minutes of ${liveTicker()}.${note}`;
+    return `Live ${liveTicker()}: ${s.bars.m.length} minutes so far, latest ${at} ET. Checking again every minute.${note}`;
+  }
+
   function messageItem(e) {
     const cls = KIND_CLASS[e.kind] ?? "neutral";
     return h("li", { class: `msg msg--${cls}` },
       h("div", { class: "msg__head" }, h("span", { class: `pill pill--${cls}` }, KIND_LABEL[e.kind] ?? e.kind),
         h("span", { class: "msg__time" }, `${etClock(s.bars.open_ms, e.sent_m)} ET, about ${etClock(s.bars.open_ms, e.about_m)}`)),
-      h("p", { class: "msg__text" }, upper(e.text)));
+      h("p", { class: "msg__text" }, capitalize(e.text)));
   }
 
   // Only new messages are added, so earlier ones do not replay their entrance.

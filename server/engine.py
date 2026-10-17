@@ -13,6 +13,7 @@ import numpy as np
 import pandas as pd
 from sklearn.ensemble import IsolationForest
 
+import market_hours
 from errors import UserError
 
 NY = "America/New_York"
@@ -533,8 +534,8 @@ def alpaca_feed(ticker, key, secret):
 
 
 def market_is_open():
-    now = pd.Timestamp.now(tz=NY)
-    return now.weekday() < 5 and pd.Timestamp("09:30").time() <= now.time() < pd.Timestamp("16:00").time()
+    """Web-app change: holidays and half days count as closed (the notebook only checked for weekdays)."""
+    return market_hours.is_open(pd.Timestamp.now(tz=NY))
 
 
 def run_replay(day_bars, history_bars, cfg=DEFAULT_CONFIG, pause=0.0, log=print, on_step=None):

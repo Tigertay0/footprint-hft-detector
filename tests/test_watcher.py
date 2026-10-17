@@ -16,6 +16,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "server"))
 
 import engine as E  # noqa: E402
+import market_hours as MH  # noqa: E402
 import notify as N  # noqa: E402
 import store as S  # noqa: E402
 import supervisor as SV  # noqa: E402
@@ -83,9 +84,20 @@ def test_env_file_parsing_and_real_environment_wins(tmp_path: Path, monkeypatch:
     path = tmp_path / "watcher.env"
     path.write_text(f"# comment\nNTFY_TOPIC = \"{TOPIC}\"\nNTFY_SERVER=https://ntfy.example\n\nignored line\n")
     monkeypatch.delenv("NTFY_TOPIC", raising=False)
-    assert W.load_env_file(path) == {"NTFY_TOPIC": TOPIC, "NTFY_SERVER": "https://ntfy.example"}
+    monkeypatch.delenv("NTFY_SERVER", raising=False)
+    assert N.load_env_file(path) == {"NTFY_TOPIC": TOPIC, "NTFY_SERVER": "https://ntfy.example"}
     monkeypatch.setenv("NTFY_TOPIC", "from_env")
-    assert W.load_env_file(path)["NTFY_TOPIC"] == "from_env"
+    assert N.load_env_file(path)["NTFY_TOPIC"] == "from_env"
+
+
+def test_env_file_with_a_byte_order_mark_still_names_the_topic(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    path = tmp_path / "watcher.env"
+    path.write_text(f"NTFY_TOPIC={TOPIC}\n", encoding="utf-8-sig")       # what Notepad and PowerShell 5 often write
+    monkeypatch.delenv("NTFY_TOPIC", raising=False)
+    assert N.load_env_file(path)["NTFY_TOPIC"] == TOPIC
+    path.write_bytes(b"\xff\xfeN\x00")
+    with pytest.raises(UserError, match="plain text"):
+        N.load_env_file(path)
 
 
 def test_missing_topic_is_a_setup_problem() -> None:
@@ -109,9 +121,19 @@ def test_session_phase(when: str, phase: str) -> None:
 
 
 def test_half_days_are_recognised() -> None:
-    assert W.is_early_close(date(2026, 11, 27)) and W.is_early_close(date(2026, 12, 24))
-    assert W.is_early_close(date(2025, 7, 3)), "July 3 is a half day when July 4 is a weekday"
-    assert not W.is_early_close(date(2026, 10, 13)) and not W.is_early_close(date(2026, 11, 26))
+    assert MH.is_early_close(date(2026, 11, 27)) and MH.is_early_close(date(2026, 12, 24))
+    assert MH.is_early_close(date(2025, 7, 3)), "July 3 is a half day when July 4 is a weekday"
+    assert not MH.is_early_close(date(2026, 10, 13)) and not MH.is_early_close(date(2026, 11, 26))
+
+
+@pytest.mark.parametrize("when, is_open", [
+    ("2026-10-13 09:29", False), ("2026-10-13 09:30", True), ("2026-10-13 15:59", True), ("2026-10-13 16:00", False),
+    ("2026-11-26 11:00", False),               # Thanksgiving is a weekday, but the market is shut
+    ("2026-11-27 12:59", True), ("2026-11-27 13:00", False),             # half day
+    ("2026-10-17 11:00", False),               # Saturday
+])
+def test_the_web_app_knows_holidays_and_half_days(when: str, is_open: bool) -> None:
+    assert MH.is_open(ts(when)) is is_open
 
 
 def test_next_session_skips_weekends_and_holidays() -> None:
@@ -552,6 +574,31 @@ def test_a_failed_delivery_is_retried_later_and_marked_delivered_late(world: dic
     assert row["notified"] == 1 and row["note"] == "delivered late"
 
 
+def test_an_alert_that_is_given_up_on_is_named_once_messages_get_through(world: dict, tmp_path: Path) -> None:
+    watcher, store, rec, clock = make(tmp_path, world, start="10:00")
+    with_fake_tracker(watcher, clock)
+    rec.ok = False
+    watcher._handle("TSLA", event())
+    for _ in range(W.MAX_DELIVERY_ATTEMPTS):
+        watcher._flush(clock.t)
+    assert not watcher.pending and watcher.undelivered == ["TSLA 10:01"]
+    assert store.recent(1)[0]["note"].startswith("gave up")
+    rec.ok = True                                                      # the phone is reachable again
+    watcher._flush(clock.t)
+    assert rec.sent[-1].title == "Footprint: alerts were not delivered" and "TSLA 10:01" in rec.sent[-1].body
+    assert not watcher.undelivered
+
+
+def test_a_late_warning_counts_against_the_hourly_cap(world: dict, tmp_path: Path) -> None:
+    watcher, _store, rec, clock = make(tmp_path, world, start="10:00", cfg=_cfg(max_alerts_per_hour=1))
+    with_fake_tracker(watcher, clock)
+    rec.fail_next = 1
+    watcher._handle("TSLA", event(about="10:01", sent="10:02"))
+    watcher._flush(clock.t)                                            # delivered late
+    watcher._handle("TSLA", event(about="10:10", sent="10:11"))
+    assert len(watcher.held) == 1, "the late warning used up this hour's allowance"
+
+
 # ---------------------------------------------------------------- the feed
 def test_an_empty_answer_during_trading_hours_counts_as_a_dead_feed(world: dict, tmp_path: Path) -> None:
     watcher, store, rec, clock = make(tmp_path, world, start="10:00", fetch=lambda tickers: {t: None for t in tickers})
@@ -584,6 +631,24 @@ def test_feed_outage_is_announced_once_and_recovery_too(world: dict, tmp_path: P
     state["fail"] = False
     watcher.tick()
     assert rec.titles().count("Footprint data feed is back") == 1
+
+
+def test_a_feed_notice_that_does_not_go_through_is_tried_again(world: dict, tmp_path: Path) -> None:
+    notice = "Footprint cannot reach the data feed"
+
+    class FirstNoticeFails(Recorder):
+        def send(self, message: N.Message) -> bool:
+            ok = super().send(message)
+            return ok and not (message.title == notice and self.titles().count(notice) == 1)
+
+    def fetch(_tickers: list[str]) -> dict:
+        raise ConnectionError("down")
+
+    clock = Clock(world["day"] + pd.Timedelta(hours=10))
+    watcher, _s, rec, _c = make(tmp_path, world, start="10:00", fetch=fetch, notifier=FirstNoticeFails(clock))
+    for _ in range(W.FEED_FAILURES_BEFORE_NOTICE + 3):
+        watcher.tick()
+    assert rec.titles().count(notice) == 2 and watcher.feed_alerted
 
 
 def test_data_that_stops_updating_is_reported_by_time_and_recovery_too(world: dict, tmp_path: Path) -> None:
@@ -641,6 +706,21 @@ def test_a_pause_between_checks_is_announced(world: dict, tmp_path: Path) -> Non
     watcher.tick()
     paused = [m for m in rec.sent if m.title == "Footprint was paused"]
     assert len(paused) == 1 and "10:00 to 10:25" in paused[0].body
+
+
+def test_slow_morning_training_is_not_reported_as_a_pause(world: dict, tmp_path: Path) -> None:
+    clocks: list[Clock] = []
+
+    def slow_load(_t: str, _d: int) -> pd.DataFrame:
+        clocks[0].advance(minutes=4)                                  # longer than GAP_AFTER, as on an old PC
+        return world["history"]
+
+    watcher, _s, rec, clock = make(tmp_path, world, start="09:15", load_history=slow_load)
+    clocks.append(clock)
+    watcher.tick()                                                    # preparation: trains the model
+    clock.advance(seconds=30)
+    watcher.tick()
+    assert "Footprint was paused" not in rec.titles()
 
 
 # ---------------------------------------------------------------- startup problems
@@ -735,6 +815,37 @@ def test_repeated_errors_are_collapsed_in_the_log(monkeypatch: pytest.MonkeyPatc
     assert flt.filter(last) is True and "repeated 2 more times" in last.getMessage()
     assert flt.filter(logging.LogRecord("x", logging.INFO, __file__, 1, "fine", (), None)) is True
 
+    def failure(exc: Exception) -> logging.LogRecord:
+        return logging.LogRecord("x", logging.ERROR, __file__, 1, "tick failed", (), (type(exc), exc, None))
+
+    assert flt.filter(failure(ValueError())) is True
+    assert flt.filter(failure(KeyError())) is True, "a different failure behind the same message is shown at once"
+    assert flt.filter(failure(ValueError())) is False
+
+
+def test_the_log_file_and_the_console_both_get_each_error(monkeypatch: pytest.MonkeyPatch) -> None:
+    now = {"t": 1000.0}
+    monkeypatch.setattr(W.time, "monotonic", lambda: now["t"])
+    flt = W.RepeatFilter()                                             # one filter shared by both handlers, as in setup_logging
+    outputs: list[list[str]] = [[], []]
+    logger = logging.getLogger("footprint.test.repeat")
+    monkeypatch.setattr(logger, "propagate", False)
+    for out in outputs:
+        handler = logging.Handler()
+        handler.emit = lambda record, out=out: out.append(record.getMessage())   # type: ignore[method-assign]
+        handler.addFilter(flt)
+        logger.addHandler(handler)
+    try:
+        logger.error("feed down")
+        now["t"] += 20
+        logger.error("feed down")
+        now["t"] += W.RepeatFilter.WINDOW_SECONDS
+        logger.error("feed down")
+    finally:
+        logger.handlers.clear()
+    expected = ["feed down", "feed down (repeated 1 more times since the last note)"]
+    assert outputs == [expected, expected]
+
 
 # ---------------------------------------------------------------- supervisor
 class RecordingNotifier:
@@ -773,6 +884,12 @@ def test_supervisor_warns_the_phone_after_repeated_quick_crashes_then_backs_off(
     assert sleeps == [15.0, 30.0, 60.0, 120.0, 240.0]
 
 
+def test_supervisor_warns_when_the_watcher_dies_a_few_minutes_after_each_start() -> None:
+    _code, notifier, sleeps = _supervise([1] * 4, [90.0] * 4)
+    assert len([m for m in notifier.sent if "keeps crashing" in m.title]) == 1
+    assert sleeps == [15.0] * 4
+
+
 def test_supervisor_resets_after_a_long_healthy_run() -> None:
     _code, notifier, sleeps = _supervise([1, 1, 1, 1, 1], [1, 1, 1, SV.STABLE_SECONDS + 1, 1])
     assert len(notifier.sent) == 1
@@ -806,6 +923,35 @@ def test_alert_history_and_watcher_status_endpoints(tmp_path: Path, monkeypatch:
     if main._alert_store:
         main._alert_store.close()
     monkeypatch.setattr(main, "_alert_store", None)
+
+
+def test_an_unreadable_history_is_reported_not_shown_as_empty(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from fastapi.testclient import TestClient
+    import main
+    monkeypatch.setenv("FOOTPRINT_DATA_DIR", str(tmp_path))
+    monkeypatch.setattr(main, "_alert_store", None)
+    main._post_times.clear()
+    (tmp_path / "alerts.db").write_bytes(b"not a database " * 200)
+    client = TestClient(main.app)
+    try:
+        assert client.get("/api/alerts").status_code == 503
+        assert client.get("/api/watcher").status_code == 503, "a broken history is not 'no watcher yet'"
+    finally:
+        if main._alert_store:
+            main._alert_store.close()
+        main._post_times.clear()
+
+
+def test_a_relative_data_folder_still_opens_read_only(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv("FOOTPRINT_DATA_DIR", "data")
+    assert S.data_dir() == (tmp_path / "data").resolve()
+    writer = S.AlertStore(S.data_dir() / "alerts.db")
+    writer.heartbeat("watching", ["TSLA"], "ok")
+    reader = S.AlertStore(S.data_dir() / "alerts.db", readonly=True)    # needs an absolute path for its file: URI
+    assert reader.read_heartbeat()["detail"] == "ok"
+    reader.close()
+    writer.close()
 
 
 def test_alert_history_reads_are_rate_limited(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

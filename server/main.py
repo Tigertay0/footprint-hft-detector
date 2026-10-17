@@ -24,13 +24,15 @@ from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
+from starlette.datastructures import Headers
 from starlette.middleware.trustedhost import TrustedHostMiddleware
+from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 import analysis as A
 import engine as E
 import jobs as J
 from errors import UserError
-from store import AlertStore, data_dir
+from store import MAX_LIMIT, AlertStore, data_dir
 from validation import normalize_ticker
 
 log = logging.getLogger("footprint")
@@ -42,6 +44,7 @@ MAX_BODY_BYTES = MAX_UPLOAD_BYTES + 1024 * 1024
 MAX_CSV_ROWS = 400_000
 MAX_DAYS = 29                      # Yahoo serves roughly 30 days of 1-minute bars
 MAX_SCANS_KEPT = 8
+MAX_CACHED_DOWNLOADS = 8
 MAX_CONCURRENT_SCANS = 2
 DATA_TTL_SECONDS = 15 * 60
 POSTS_PER_MINUTE = 30
@@ -51,10 +54,41 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", "[::1]", "testserver"] + [
     h.strip() for h in os.environ.get("FOOTPRINT_ALLOWED_HOSTS", "").split(",") if h.strip()]
 
 mimetypes.add_type("font/woff2", ".woff2")
+TOO_LARGE_TEXT = "That upload is larger than 25 MB."
+
+
+class BodyLimit:
+    """Caps request bodies while they stream in. A Content-Length check alone misses chunked uploads,
+    which the form parser would otherwise spool to disk without limit before any endpoint runs."""
+
+    def __init__(self, app: ASGIApp, max_bytes: int) -> None:
+        self.app, self.max_bytes = app, max_bytes
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
+        length = Headers(scope=scope).get("content-length", "")
+        if length.isdigit() and int(length) > self.max_bytes:
+            await JSONResponse({"detail": TOO_LARGE_TEXT}, status_code=413)(scope, receive, send)
+            return
+        received = 0
+
+        async def capped_receive() -> Message:
+            nonlocal received
+            message = await receive()
+            received += len(message.get("body", b""))
+            if received > self.max_bytes:
+                raise HTTPException(413, TOO_LARGE_TEXT)    # FastAPI passes this through from body parsing
+            return message
+
+        await self.app(scope, capped_receive, send)
+
 
 app = FastAPI(title="Footprint", docs_url=None, redoc_url=None)
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 app.add_middleware(TrustedHostMiddleware, allowed_hosts=ALLOWED_HOSTS)
+app.add_middleware(BodyLimit, max_bytes=MAX_BODY_BYTES)
 
 SECURITY_HEADERS = {
     # Scripts and styles only from this server. The front end sets styles through the CSSOM, never inline markup.
@@ -79,14 +113,12 @@ _post_times: dict[tuple[str, str], deque[float]] = defaultdict(deque)
 
 @app.middleware("http")
 async def guard(request: Request, call_next: Callable[[Request], Awaitable[Response]]) -> Response:
-    """Reject oversized bodies and cross-site writes, then add the security headers."""
-    length = request.headers.get("content-length", "")
-    if length.isdigit() and int(length) > MAX_BODY_BYTES:
-        return JSONResponse({"detail": "That upload is larger than 25 MB."}, status_code=413)
+    """Reject cross-site writes, then add the security headers (to refusals too)."""
     origin = request.headers.get("origin")
     if request.method in ("POST", "DELETE") and origin and urlparse(origin).netloc != request.headers.get("host"):
-        return JSONResponse({"detail": "Cross-site requests are not allowed."}, status_code=403)
-    response = await call_next(request)
+        response: Response = JSONResponse({"detail": "Cross-site requests are not allowed."}, status_code=403)
+    else:
+        response = await call_next(request)
     response.headers.update(SECURITY_HEADERS)
     if request.url.path.startswith("/api/"):
         response.headers["Cache-Control"] = "no-store"
@@ -110,7 +142,7 @@ def _limit(request: Request, bucket: str = "write", per_minute: int = POSTS_PER_
         if len(window) >= per_minute:
             raise HTTPException(429, "Too many requests. Wait a minute and try again.")
         window.append(now)
-        for stale in [k for k, v in _post_times.items() if not v and k != key]:
+        for stale in [k for k, v in _post_times.items() if k != key and (not v or now - v[-1] > 60)]:
             del _post_times[stale]
 
 
@@ -141,10 +173,15 @@ def _market_bars(ticker: str, days: int) -> pd.DataFrame:
             if hit and time.time() - hit[0] < DATA_TTL_SECONDS:
                 _data_cache.move_to_end(key)
                 return hit[1]
-        bars = E.load_yfinance(ticker, days)
+        try:
+            bars = E.load_yfinance(ticker, days)
+        except Exception:
+            with _lock:
+                _download_locks.pop(key, None)  # failed lookups (often mistyped tickers) must not pile up locks
+            raise
         with _lock:
             _data_cache[key] = (time.time(), bars)
-            while len(_data_cache) > MAX_SCANS_KEPT:
+            while len(_data_cache) > MAX_CACHED_DOWNLOADS:
                 old, _ = _data_cache.popitem(last=False)
                 _download_locks.pop(old, None)
     return bars
@@ -250,11 +287,16 @@ def live(body: LiveRequest, request: Request) -> dict[str, str]:
     return _start(request, "live", J.live_job, ticker, A.make_cfg(body.sensitivity, ticker, 7, "yfinance"))
 
 
-@app.get("/api/jobs/{job_id}")
-def job_status(job_id: str, since: int = 0) -> dict[str, Any]:
+def _job(job_id: str) -> J.Job:
     job = jobs.get(job_id)
     if job is None:
         raise HTTPException(404, "That job no longer exists.")
+    return job
+
+
+@app.get("/api/jobs/{job_id}")
+def job_status(job_id: str, since: int = 0) -> dict[str, Any]:
+    job = _job(job_id)
     job.last_poll = time.time()
     since = max(0, since)
     status = job.status                       # read the status first, then take one snapshot of the event list
@@ -271,10 +313,7 @@ def job_status(job_id: str, since: int = 0) -> dict[str, Any]:
 
 @app.delete("/api/jobs/{job_id}")
 def job_stop(job_id: str) -> dict[str, bool]:
-    job = jobs.get(job_id)
-    if job is None:
-        raise HTTPException(404, "That job no longer exists.")
-    job.stop.set()
+    _job(job_id).stop.set()
     return {"ok": True}
 
 
@@ -287,24 +326,24 @@ READS_PER_MINUTE = 120
 
 
 def _alerts() -> AlertStore | None:
-    """The watcher's history, opened read-only. None until the watcher has created it."""
+    """The watcher's history, opened read-only. None until the watcher has created it.
+
+    Raises sqlite3.Error when the file exists but cannot be opened, so callers never mistake a broken
+    history for an empty one."""
     global _alert_store
     path = data_dir() / "alerts.db"
     with _lock:
         if _alert_store is None and path.exists():
-            try:
-                _alert_store = AlertStore(path, readonly=True)
-            except sqlite3.Error:
-                log.exception("could not open the alert history")
+            _alert_store = AlertStore(path, readonly=True)
         return _alert_store
 
 
 @app.get("/api/alerts")
-def alert_history(request: Request, limit: int = Query(100, ge=1, le=200), ticker: str | None = None) -> dict[str, Any]:
+def alert_history(request: Request, limit: int = Query(100, ge=1, le=MAX_LIMIT), ticker: str | None = None) -> dict[str, Any]:
     _limit(request, "read", READS_PER_MINUTE)
     wanted = _ticker(ticker) if ticker else None
-    store = _alerts()
     try:
+        store = _alerts()
         return {"alerts": store.recent(limit, wanted) if store else []}
     except sqlite3.Error:
         log.exception("could not read the alert history")
@@ -314,19 +353,20 @@ def alert_history(request: Request, limit: int = Query(100, ge=1, le=200), ticke
 @app.get("/api/watcher")
 def watcher_status(request: Request) -> dict[str, Any]:
     _limit(request, "read", READS_PER_MINUTE)
-    store = _alerts()
     try:
+        store = _alerts()
         beat = store.read_heartbeat() if store else None
     except sqlite3.Error:
         log.exception("could not read the watcher heartbeat")
-        beat = None
+        raise HTTPException(503, "The watcher status cannot be read right now. Try again in a moment.") from None
+    market_open = E.market_is_open()
     if beat is None:
-        return {"seen": False, "running": False, "market_open": E.market_is_open()}
+        return {"seen": False, "running": False, "market_open": market_open}
     age = (pd.Timestamp.now(tz="UTC") - pd.Timestamp(beat["updated_utc"])).total_seconds()
     return {
         "seen": True, "running": age <= WATCHER_STALE_SECONDS and beat["state"] != "stopped",
         "state": beat["state"], "tickers": [t for t in beat["tickers"].split(",") if t], "detail": beat["detail"],
-        "updated_utc": beat["updated_utc"], "age_seconds": int(age), "market_open": E.market_is_open(),
+        "updated_utc": beat["updated_utc"], "age_seconds": int(age), "market_open": market_open,
     }
 
 

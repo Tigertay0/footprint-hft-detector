@@ -4,6 +4,7 @@ import json
 import sys
 import time
 from pathlib import Path
+from types import SimpleNamespace
 
 import pandas as pd
 import pytest
@@ -15,6 +16,7 @@ import analysis as A  # noqa: E402
 import engine as E  # noqa: E402
 import jobs as J  # noqa: E402
 import main  # noqa: E402
+from errors import UserError  # noqa: E402
 
 
 @pytest.fixture(scope="module")
@@ -86,6 +88,16 @@ def test_too_few_sessions_is_explained(client: TestClient) -> None:
     assert res.status_code == 422 and "sessions" in res.json()["detail"]
 
 
+def test_kept_sessions_are_long_enough_for_the_planted_event_test() -> None:
+    bars = E.make_synthetic(days=10)
+    cfg = A.make_cfg("balanced", "x", 29, "synthetic")
+    shortest = bars.groupby(bars.index.normalize()).head(A.MIN_BARS_PER_SESSION)
+    scan = A.run_scan(shortest, cfg, "x", "sample", "balanced")
+    assert E.planted_setup(scan.bars, cfg)[3], "events can be planted in the shortest session that is kept"
+    with pytest.raises(UserError):                                      # one bar fewer: left out, not a crash later
+        A.run_scan(bars.groupby(bars.index.normalize()).head(A.MIN_BARS_PER_SESSION - 1), cfg, "x", "sample", "balanced")
+
+
 def _wait(client: TestClient, job_id: str, timeout: float = 120) -> dict:
     end = time.time() + timeout
     while time.time() < end:
@@ -133,11 +145,32 @@ def test_live_is_refused_when_market_is_closed(client: TestClient, monkeypatch: 
 def test_cross_site_writes_are_refused(client: TestClient) -> None:
     res = client.post("/api/scan", data={"source": "sample"}, headers={"Origin": "https://evil.example"})
     assert res.status_code == 403
+    assert res.headers["x-frame-options"] == "DENY"
 
 
 def test_oversized_upload_is_refused_before_parsing(client: TestClient) -> None:
     res = client.post("/api/scan", data={"source": "csv"}, headers={"Content-Length": str(40 * 1024 * 1024)})
     assert res.status_code == 413
+    assert res.headers["x-content-type-options"] == "nosniff", "refusals carry the security headers too"
+
+
+def test_a_chunked_upload_cannot_slip_past_the_size_cap(client: TestClient) -> None:
+    chunk = b" " * (1024 * 1024)
+
+    def body():                                                         # no Content-Length: sent chunked
+        for _ in range(main.MAX_BODY_BYTES // len(chunk) + 2):
+            yield chunk
+
+    res = client.post("/api/replay", content=body(), headers={"Content-Type": "application/json"})
+    assert res.status_code == 413 and "25 MB" in res.json()["detail"]
+
+
+def test_rate_limit_entries_for_departed_clients_are_dropped() -> None:
+    main._post_times.clear()
+    main._post_times[("10.0.0.9", "write")].append(time.time() - 120)
+    main._limit(SimpleNamespace(client=SimpleNamespace(host="10.0.0.1")))  # type: ignore[arg-type]
+    assert list(main._post_times) == [("10.0.0.1", "write")]
+    main._post_times.clear()
 
 
 def test_ids_and_dates_are_validated(client: TestClient) -> None:

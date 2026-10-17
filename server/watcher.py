@@ -18,7 +18,6 @@ import argparse
 import json
 import logging
 import logging.handlers
-import os
 import signal
 import sys
 import threading
@@ -27,18 +26,17 @@ import urllib.request
 from collections import deque
 from collections.abc import Callable
 from dataclasses import dataclass, replace
-from datetime import date, time as dtime, timedelta
-from functools import lru_cache
+from datetime import time as dtime, timedelta
 from pathlib import Path
 from typing import Any, Literal
 
-import holidays
 import pandas as pd
 
 import analysis as A
 import engine as E
-from errors import UserError
-from notify import DEFAULT_SERVER, DryRunNotifier, Message, Notifier, NtfyNotifier
+from errors import SETUP_PROBLEM_EXIT, UserError
+from market_hours import OPEN, close_time, is_trading_day
+from notify import DryRunNotifier, Message, Notifier, load_env_file, notifier_from_env
 from store import AlertStore, data_dir
 from validation import MAX_WATCHLIST, normalize_ticker
 
@@ -46,9 +44,6 @@ log = logging.getLogger("footprint.watcher")
 ROOT = Path(__file__).resolve().parent.parent
 
 PREP_START = dtime(9, 15)             # models are trained before the bell
-OPEN = dtime(9, 30)
-CLOSE = dtime(16, 0)
-EARLY_CLOSE = dtime(13, 0)            # half days: day after Thanksgiving, Dec 24, July 3
 CLOSE_GRACE = timedelta(minutes=2)    # the last minute's bar is published just after the close
 IDLE_SLEEP_SECONDS = 60
 PREP_SLEEP_SECONDS = 30
@@ -66,7 +61,6 @@ DIGEST_LINES = 5
 PING_EVERY = timedelta(minutes=1)
 MIN_TRAINING_SESSIONS = 3
 QUIET, NORMAL, HIGH, URGENT = 2, 3, 4, 5
-SETUP_PROBLEM_EXIT = 2                # the supervisor stops restarting on this code
 
 CONFIG_KEYS = {"tickers", "sensitivity", "poll_seconds", "history_days", "notify_cleared", "daily_summary",
                "max_alerts_per_hour", "app_url", "heartbeat_url"}
@@ -84,6 +78,11 @@ class WatcherConfig:
     max_alerts_per_hour: int = 20
     app_url: str | None = None
     heartbeat_url: str | None = None     # pinged while healthy, so a dead-man's-switch service can warn you if pings stop
+
+    @property
+    def alerts_url(self) -> str | None:
+        """The Alerts tab, opened when a notification is tapped."""
+        return f"{self.app_url}/#/alerts" if self.app_url else None
 
 
 def _int_in(raw: dict[str, Any], key: str, default: int, low: int, high: int) -> int:
@@ -142,47 +141,7 @@ def load_config(path: Path) -> WatcherConfig:
         raise UserError(f"{path.name} is not valid JSON ({exc.msg} on line {exc.lineno}).") from exc
 
 
-def load_env_file(path: Path) -> dict[str, str]:
-    """KEY=VALUE lines, # comments allowed. Real environment variables take precedence."""
-    values: dict[str, str] = {}
-    if path.exists():
-        try:
-            text = path.read_text(encoding="utf-8-sig")
-        except UnicodeDecodeError:
-            raise UserError(f"{path.name} must be saved as plain text (UTF-8 or ASCII).") from None
-        for line in text.splitlines():
-            line = line.strip()
-            if line and not line.startswith("#") and "=" in line:
-                key, _, value = line.partition("=")
-                values[key.strip()] = value.strip().strip("\"'")
-    return {**values, **{k: v for k, v in os.environ.items() if k.startswith("NTFY_")}}
-
-
-# ---------------------------------------------------------------- market calendar
-@lru_cache(maxsize=8)
-def _nyse(year: int) -> holidays.HolidayBase:
-    return holidays.NYSE(years=year)
-
-
-def is_trading_day(day: date) -> bool:
-    return day.weekday() < 5 and day not in _nyse(day.year)
-
-
-def is_early_close(day: date) -> bool:
-    """NYSE half days. Not every one is listed by the holidays package, so the rules are spelled out here."""
-    if not is_trading_day(day):
-        return False
-    if day.month == 11 and day.weekday() == 4 and 23 <= day.day <= 29:      # Friday after Thanksgiving
-        return True
-    if day.month == 12 and day.day == 24:
-        return True
-    return day.month == 7 and day.day == 3 and date(day.year, 7, 4).weekday() < 5
-
-
-def close_time(day: date) -> dtime:
-    return EARLY_CLOSE if is_early_close(day) else CLOSE
-
-
+# ---------------------------------------------------------------- market calendar (holidays and half days: market_hours.py)
 def session_phase(now: pd.Timestamp) -> Literal["closed", "prep", "open"]:
     """'prep' is the quarter hour before the bell, when models are trained. 'open' includes the close grace."""
     if not is_trading_day(now.date()):
@@ -249,7 +208,7 @@ def _cap(text: str) -> str:
 def build_message(ticker: str, kind: str, about: pd.Timestamp, sent: pd.Timestamp, text: str,
                   cfg: WatcherConfig) -> Message | None:
     """Turns one monitor event into a notification. None means 'record it, do not notify'."""
-    click = f"{cfg.app_url}/#/alerts" if cfg.app_url else None
+    click = cfg.alerts_url
     when = f"{sent:%H:%M} ET"
     if kind == "EARLY WARNING":
         return Message(f"{ticker}: possible HFT activity",
@@ -307,6 +266,7 @@ class Watcher:
         self.limit_notice_sent = False
         self.pending: list[Pending] = []
         self.held: list[Pending] = []
+        self.undelivered: list[str] = []          # alerts given up on, still to be named in a notice
 
     # -------------------------------------------------------- main loop
     def run_forever(self, stop: threading.Event) -> None:
@@ -349,13 +309,13 @@ class Watcher:
         self._check_gap(now)
         self._retry_training(now)
         if phase == "prep":
-            self.last_tick = now
+            self.last_tick = self.clock()             # when this pass ended: training many tickers is not a pause
             self._beat("preparing", "Models are trained. Waiting for the bell.")
             return PREP_SLEEP_SECONDS
         self._poll(now)
         self._check_stale(now)
         self._flush(now)
-        self.last_tick = now
+        self.last_tick = self.clock()
         self._beat_session(now)
         return float(self.cfg.poll_seconds)
 
@@ -547,10 +507,9 @@ class Watcher:
         self.feed_failures += 1
         log.error("data feed failed (%s in a row)", self.feed_failures)
         if self.feed_failures >= FEED_FAILURES_BEFORE_NOTICE and not self.feed_alerted:
-            self.feed_alerted = True
-            self._send(Message("Footprint cannot reach the data feed",
-                               "Alerts are paused until it recovers. Silence now does not mean the market is quiet.",
-                               NORMAL, ("warning",)))
+            self.feed_alerted = self._push(Message(        # not delivered: try again on the next failed check
+                "Footprint cannot reach the data feed",
+                "Alerts are paused until it recovers. Silence now does not mean the market is quiet.", NORMAL, ("warning",)))
 
     def _feed_ok(self) -> None:
         if self.feed_alerted:
@@ -583,9 +542,7 @@ class Watcher:
 
     def _record(self, ticker: str, kind: str, day: str, about: str, sent: str, text: str, delivered: bool, note: str | None) -> int:
         try:
-            alert_id = self.store.add_alert(ticker, kind, day, about, sent, text)
-            self.store.mark_notified(alert_id, delivered, note)
-            return alert_id
+            return self.store.add_alert(ticker, kind, day, about, sent, text, delivered=delivered, note=note)
         except Exception:                             # noqa: BLE001 - the push already went out or was queued
             log.exception("could not save the alert to the history")
             return -1
@@ -629,22 +586,30 @@ class Watcher:
         self._push(message)
 
     def _flush(self, now: pd.Timestamp) -> None:
-        """Retries alerts that could not be delivered, and sends held-back warnings as one digest."""
+        """Retries alerts that could not be delivered, sends held-back warnings as one digest, and names any
+        alert that was given up on once a message gets through again."""
         for item in list(self.pending)[: 1 if self.notify_failing else len(self.pending)]:
             item.attempts += 1
             if self._push(replace(item.message, title=f"{item.message.title} (delayed)")):
                 self._mark(item.alert_id, True, "delivered late")
                 self.pending.remove(item)
+                if item.message.priority == HIGH:
+                    self.sent_times.append(now)       # a late warning still counts against the hourly cap
             elif item.attempts >= MAX_DELIVERY_ATTEMPTS:
                 log.error("giving up on delivering %s after %s attempts", item.label, item.attempts)
                 self._mark(item.alert_id, False, f"gave up after {item.attempts} attempts")
                 self.pending.remove(item)
+                self.undelivered.append(item.label)
+        if self.undelivered and not self.pending:
+            lost = Message("Footprint: alerts were not delivered",
+                           "These never reached your phone. They are saved in the Alerts tab:\n"
+                           + "\n".join(_digest_lines(self.undelivered)), NORMAL, ("warning",), self.cfg.alerts_url)
+            if self._push(lost):
+                self.undelivered.clear()
         if self.held and self._window_room(now):
-            lines = [p.label for p in self.held[:DIGEST_LINES]]
-            if len(self.held) > DIGEST_LINES:
-                lines.append(f"and {len(self.held) - DIGEST_LINES} more")
-            digest = Message("Footprint: warnings held back earlier", "Held back by the hourly limit:\n" + "\n".join(lines),
-                             HIGH, ("warning",), f"{self.cfg.app_url}/#/alerts" if self.cfg.app_url else None)
+            digest = Message("Footprint: warnings held back earlier",
+                             "Held back by the hourly limit:\n" + "\n".join(_digest_lines([p.label for p in self.held])),
+                             HIGH, ("warning",), self.cfg.alerts_url)
             if self._push(digest):
                 self.sent_times.append(now)
                 for item in self.held:
@@ -658,6 +623,14 @@ class Watcher:
             self.store.mark_notified(alert_id, delivered, note)
         except Exception:                             # noqa: BLE001
             log.exception("could not update the alert history")
+
+
+def _digest_lines(labels: list[str]) -> list[str]:
+    """At most DIGEST_LINES labels, then how many more there were."""
+    lines = labels[:DIGEST_LINES]
+    if len(labels) > DIGEST_LINES:
+        lines.append(f"and {len(labels) - DIGEST_LINES} more")
+    return lines
 
 
 # ---------------------------------------------------------------- keep the PC awake
@@ -678,12 +651,20 @@ class RepeatFilter(logging.Filter):
 
     def __init__(self) -> None:
         super().__init__()
-        self._seen: dict[tuple[str, int, str], tuple[float, int]] = {}
+        self._seen: dict[tuple[str, int, str, str], tuple[float, int]] = {}
 
     def filter(self, record: logging.LogRecord) -> bool:
         if record.levelno < logging.ERROR:
             return True
-        key = (record.name, record.levelno, record.getMessage()[:200])
+        decided = getattr(record, "repeat_shown", None)
+        if decided is not None:                       # each record visits every handler: count it and decide once
+            return decided
+        record.repeat_shown = self._decide(record)
+        return record.repeat_shown
+
+    def _decide(self, record: logging.LogRecord) -> bool:
+        error = record.exc_info[0].__name__ if record.exc_info and record.exc_info[0] else ""
+        key = (record.name, record.levelno, record.getMessage()[:200], error)    # a new kind of failure is shown at once
         now = time.monotonic()
         last, skipped = self._seen.get(key, (0.0, 0))
         if now - last < self.WINDOW_SECONDS and last:
@@ -710,10 +691,9 @@ def setup_logging(folder: Path) -> None:
 def build_notifier(secrets: dict[str, str], dry_run: bool) -> Notifier:
     if dry_run:
         return DryRunNotifier()
-    topic = secrets.get("NTFY_TOPIC", "")
-    if not topic:
+    if not secrets.get("NTFY_TOPIC"):
         raise UserError("No ntfy topic is set. Put NTFY_TOPIC=your-secret-topic in watcher.env, or run install-watcher.ps1.")
-    return NtfyNotifier(topic, secrets.get("NTFY_SERVER", DEFAULT_SERVER), secrets.get("NTFY_TOKEN") or None)
+    return notifier_from_env(secrets)
 
 
 def main(argv: list[str] | None = None) -> int:

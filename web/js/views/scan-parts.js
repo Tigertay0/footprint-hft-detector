@@ -1,15 +1,18 @@
 // Building blocks for the Scan view: session strip, chart panel and alert feed.
 import { h, icon, clear, segmented, copyText } from "../dom.js";
-import { SessionChart } from "../chart.js";
+import { FULL_SESSION, SessionChart } from "../chart.js";
 import {
-  dateLong, dayOfMonth, weekdayShort, etClock, episodeHeadline, reasonSentence, ruleLine, sensitivityNote, plural,
+  LEVELS, dateLong, dayOfMonth, weekdayShort, etClock, episodeHeadline, reasonSentence, ruleLine, sensitivityNote, plural,
 } from "../format.js";
 
 const FEED_PREVIEW = 8;
 const ZOOM_PADDING_MIN = 25;
-const FULL_SESSION = [0, 390];
-const LEVEL_WORDS = ["Normal", "Elevated", "High"];
 const COPY_RESET_MS = 1600;
+
+/** Minutes of the session shown when an alert episode is opened: the episode plus some context either side. */
+export function zoomWindow(ep) {
+  return [Math.max(FULL_SESSION[0], ep.start_m - ZOOM_PADDING_MIN), Math.min(FULL_SESSION[1], ep.end_m + ZOOM_PADDING_MIN)];
+}
 
 function levelOf(score, settings) {
   if (score == null) return "none";
@@ -68,7 +71,7 @@ export function chartPanel(getScan, { onPick, onReset }) {
         return;
       }
       const r = session;
-      const level = LEVEL_WORDS[r.lvl[i] ?? 0];
+      const level = LEVELS[r.lvl[i] ?? 0];
       const flags = [["Price", r.c[i].toFixed(2)], ["Volume Z", r.vz[i]?.toFixed(1) ?? "n/a"],
         ["Reversion", r.rev[i] == null ? "n/a" : `${Math.round(r.rev[i] * 100)}%`],
         ["Imbalance", r.imb[i]?.toFixed(2) ?? "n/a"], ["Risk", r.risk[i]?.toFixed(0) ?? "n/a"]];
@@ -93,10 +96,7 @@ export function chartPanel(getScan, { onPick, onReset }) {
       chart.update({ session, episodes, settings: scan.settings, selectedId: episodeId });
       const ep = episodes.find((e) => e.id === episodeId);
       reset.hidden = !ep;
-      const target = ep
-        ? [Math.max(0, ep.start_m - ZOOM_PADDING_MIN), Math.min(FULL_SESSION[1], ep.end_m + ZOOM_PADDING_MIN)]
-        : FULL_SESSION;
-      chart.setDomain(target, animate);
+      chart.setDomain(ep ? zoomWindow(ep) : FULL_SESSION, animate);
     },
     destroy: () => chart.destroy(),
   };

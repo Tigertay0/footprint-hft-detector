@@ -25,8 +25,10 @@ async function request(path, options = {}, timeoutMs = REQUEST_TIMEOUT_MS) {
     const slow = error?.name === "TimeoutError";
     throw new ApiError(slow ? "The server took too long to answer. Try again." : "Cannot reach the app server. Check that it is still running.", 0);
   }
-  const body = await response.json().catch(() => ({}));
-  if (!response.ok) throw new ApiError(detailText(body, response.status), response.status);
+  const body = await response.json().catch(() => null);
+  if (!response.ok) throw new ApiError(detailText(body ?? {}, response.status), response.status);
+  // A proxy or captive portal can answer 200 with a web page. That is a failure, not an empty result.
+  if (body === null) throw new ApiError("The server sent a reply this page cannot read. Try again.", response.status);
   return body;
 }
 
@@ -79,7 +81,8 @@ export function pollJob(jobId, onUpdate, { intervalMs = 400 } = {}) {
     since = payload.next;
     try {
       onUpdate(payload);
-    } catch {
+    } catch (error) {
+      console.error(error);
       onUpdate({ status: "error", error: "The page hit a problem while showing this result.", events: [], progress: {} });
       return;
     }

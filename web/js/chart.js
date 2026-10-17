@@ -6,7 +6,7 @@ import { etClock, nearestIndex } from "./format.js";
 const MARGIN = { l: 56, r: 14, t: 10, b: 28 };
 const PANE_GAP = 16;
 const ZOOM_MS = 360;
-const FULL_SESSION = [0, 390];
+export const FULL_SESSION = [0, 390];
 const TICK_STEPS = [5, 10, 15, 30, 60];
 const VOL_Z_CAP = 8;
 const LEVEL_CLASS = ["", "elevated", "high"];
@@ -21,7 +21,7 @@ let chartCount = 0;
 export class SessionChart {
   /**
    * @param {HTMLElement} root
-   * @param {{ kind: "scan"|"replay", onHover?: (i:number|null)=>void, onPick?: (id:string)=>void }} opts
+   * @param {{ kind: "scan"|"replay", onHover?: (i:number|null, fromPointer:boolean)=>void, onPick?: (id:string)=>void }} opts
    */
   constructor(root, opts) {
     this.root = root;
@@ -50,7 +50,10 @@ export class SessionChart {
   }
 
   update(patch) {
-    if (patch.session && patch.session !== this.state.session) this.cursor = null;
+    if (patch.session && patch.session !== this.state.session) {
+      this.cursor = null;
+      this.opts.onHover?.(null, true); // the readout must not keep describing a minute of the previous data
+    }
     this.state = { ...this.state, ...patch };
     this.render();
   }
