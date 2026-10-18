@@ -27,15 +27,25 @@ OUT_DIR = ROOT / "results"
 CFG = dict(engine.DEFAULT_CONFIG)  # the notebook's "Balanced" settings, unchanged
 MARKET_WIDE_MIN_TICKERS = 3        # an episode is market-wide if 3+ other tickers alert within 2 min
 CO_WINDOW = pd.Timedelta(minutes=2)
+EPISODE_COLUMNS = ["ticker", "start", "end", "minutes", "peak_score", "level", "volume_rule",
+                   "reversal_rule", "flow_rule", "model_flag", "bucket"]
+EVENT_COLUMNS = ["ticker", "kind", "minute"]
+
+
+def read_saved_bars(path):
+    bars = pd.read_csv(path, index_col=0)
+    bars.index = pd.to_datetime(bars.index, utc=True).tz_convert(engine.NY)
+    return bars
 
 
 def fetch_bars(ticker, offline):
     path = BARS_DIR / f"{ticker}.csv.gz"
     if offline:
-        bars = pd.read_csv(path, index_col=0)
-        bars.index = pd.to_datetime(bars.index, utc=True).tz_convert(engine.NY)
-        return bars
+        return read_saved_bars(path)
     bars = engine.load_yfinance(ticker, CFG["DAYS"])
+    if path.exists():  # keep saved sessions Yahoo has since dropped, and never shrink the file
+        saved = read_saved_bars(path)
+        bars = pd.concat([saved[~saved.index.isin(bars.index)], bars]).sort_index()
     BARS_DIR.mkdir(exist_ok=True)
     bars.to_csv(path)
     return bars
@@ -77,6 +87,13 @@ def replay_events(ticker, bars, train_days, test_days):
 
 def study_ticker(args):
     ticker, offline = args
+    try:
+        return analyse_ticker(ticker, offline)
+    except Exception as exc:
+        raise RuntimeError(f"{ticker}: study failed: {exc!r}") from exc
+
+
+def analyse_ticker(ticker, offline):
     bars = fetch_bars(ticker, offline)
     feat = engine.build_features(bars, CFG)
     train, test = engine.split_by_session(feat, CFG["TRAIN_FRACTION"])
@@ -117,9 +134,10 @@ def main():
         results = list(pool.map(study_ticker, [(t, offline) for t in TICKERS]))
     OUT_DIR.mkdir(exist_ok=True)
     summaries = pd.DataFrame([s for s, _, _ in results])
-    eps = pd.DataFrame([e for _, ep, _ in results for e in ep]).sort_values("start").reset_index(drop=True)
-    eps = tag_market_wide(eps, "start", eps)
-    events = tag_market_wide(pd.DataFrame([e for _, _, ev in results for e in ev]), "minute", eps)
+    eps = pd.DataFrame([e for _, ep, _ in results for e in ep], columns=EPISODE_COLUMNS)
+    eps = tag_market_wide(eps.sort_values("start").reset_index(drop=True), "start", eps)
+    events = pd.DataFrame([e for _, _, ev in results for e in ev], columns=EVENT_COLUMNS)
+    events = tag_market_wide(events, "minute", eps)
     summaries.to_csv(OUT_DIR / "per_ticker.csv", index=False)
     eps.to_csv(OUT_DIR / "episodes.csv", index=False)
     events.to_csv(OUT_DIR / "replay_events.csv", index=False)
