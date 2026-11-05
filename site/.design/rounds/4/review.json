@@ -1,0 +1,47 @@
+{
+  "round": 4,
+  "total": 88,
+  "verdict": "REVISE",
+  "cap": null,
+  "scores": [
+    {"category": "Brief and design-system fidelity", "points": 11, "max": 12, "evidence": "Palette, Zodiak/Sentient, Night band, one amber all hold (sheet-d.png, sections/d-13-BAND600.png). Strategy verdicts now read as one pattern in every card (sections/d-05-s3.png). Left: the 'Marking the close' mini loop uses a mono '15:59:5x' label, a third voice."},
+    {"category": "Hierarchy and layout", "points": 11, "max": 11, "evidence": "Hero 1-2-3 clear with chart and alert card inside the 900px fold (d-00-top.png). The band void is fixed: notes at 12:17 and 12:25 now sit about 120px apart (d-15-BAND745.png). Band headline sits level with the phone."},
+    {"category": "Typography", "points": 6, "max": 7, "evidence": "Tracking, left-aligned body and 18px band text are right. The band headline's grey tone leaves a one-word last line: 'stocks.' (d-13-BAND600.png) and 'actions.' in FR (sections-fr/d-13-BAND600.png). The '8 octobre' split is fixed."},
+    {"category": "Spacing and rhythm", "points": 7, "max": 7, "evidence": "Band voids cut from 300px to about 120px on desktop (d-15-BAND745.png); mobile notes now stack with an even gap (m-14-BAND738.png). Strategy cards share one footer stack; the row-2 hole is gone, only about 40px slack under the one-line description on card 4 (d-05-s3.png), acceptable."},
+    {"category": "Color and depth", "points": 9, "max": 10, "evidence": "Identity holds at thumbnail size (sheet-d.png). The active note's amber edge now ties the band to the phone (d-15-BAND745.png, 12:25 card). Amber is still a small accent in a very large dark field."},
+    {"category": "Components and states", "points": 8, "max": 10, "evidence": "Eight restyled 21st.dev pieces. No capture shows hover, pressed or focus on any control (header switch, dial, toggles, citations), so state coverage is not credited."},
+    {"category": "Anti-slop", "points": 6, "max": 7, "evidence": "No text gradients, glows, pills or uppercase labels; hero label now Sentient. Still present: decorative amber and green radial gradients inside the phone screen (Phone.tsx:75) and notification wrapper (Phone.tsx:61), barely visible but not from the brief."},
+    {"category": "Motion and interaction", "points": 8, "max": 10, "evidence": "Hero sequence, pinned scrubbed phone with live tallies, active-note highlight, different device per section (sheet-d.png). Reduced-motion fold is intact (desktop-fold-reduced.png). Not credited: reduced-motion band, hover or pointer states."},
+    {"category": "Responsive", "points": 3, "max": 4, "evidence": "390px: no horizontal scroll, headline fits, docked phone with notes beneath (m-14-BAND738.png). The mobile band headline runs to four lines (sheet-m.png) and the docked phone hides the first lines of the text under it."},
+    {"category": "Memorability", "points": 11, "max": 12, "evidence": "Both user-liked mechanisms read at thumbnail size: Round's centred serif hero with the chart rising (d-00-top.png), two-tone statement (d-01-statement.png), Auxia's cream-to-near-black band with two-tone headline (d-13-BAND600.png). Band peak no longer diluted. Held back by a first band frame that is mostly an empty phone with clipped tallies."},
+    {"category": "Accessibility and function", "points": 8, "max": 10, "evidence": "clean.md: typecheck and build pass; contrast from earlier rounds holds; one h1; skip link. Not credited: captured focus rings, keyboard use of citations, reduced-motion band."}
+  ],
+  "mechanism_verdicts": {
+    "round_serif_hero_with_drawing_rising": "Landed. Chart card top at y=640 with spike and alert card inside the fold.",
+    "round_two_tone_statement": "Landed and aligned to the page column.",
+    "auxia_cream_to_dark_band": "Landed. Clean cut, headline and phone together, notes now evenly paced.",
+    "auxia_two_tone_headline": "Landed in EN and FR; the grey second tone now orphans its last word in both languages."
+  },
+  "round3_fixes_check": {
+    "1_band_voids": "landed (d-15-BAND745.png)",
+    "2_strategy_verdicts": "landed (d-05-s3.png)",
+    "3_fr_8_octobre": "landed (sections-fr/d-13-BAND600.png)",
+    "4_mark_spacing": "landed (d-13-BAND600.png, spacing around 4.9 even)",
+    "5_active_note_amber": "landed (d-15-BAND745.png)",
+    "6_hero_label": "landed (d-00-top.png)"
+  },
+  "fixes": [
+    {"priority": 1, "gain": 1, "where": "src/content/i18n.ts lines 68 (EN) and 117 (FR), key bandRest", "now": "\" {n} notifications from 20 stocks.\" and \" {n} notifications pour 20 actions.\"", "target": "\" {n} notifications from 20\\u00A0stocks.\" and \" {n} notifications pour 20\\u00A0actions.\"", "why": "Keeps the last two words together so the grey tone breaks as 'from 20 / stocks' no more; the line breaks before '20' and no one-word last line remains."},
+    {"priority": 2, "gain": 1, "where": "src/components/Phone.tsx lines 61 and 75 (radial-gradient backgrounds)", "now": "bg-[radial-gradient(120%_80%_at_80%_0%,rgba(217,72,15,.18),transparent_60%),#1c1d21] and the two-radial stack with rgba(43,122,75,.16) over #17181c", "target": "flat bg-[#1c1d21] on line 61 and flat bg-[#17181c] on line 75", "why": "Brief calls for a faint amber radial only; this removes the green-and-amber decorative gradient and the last slop item."},
+    {"priority": 3, "gain": 1, "where": "src/components/StrategyGrid.tsx (the mini animation for 'Marking the close', the '15:59:5x' label)", "now": "font-mono label inside the loop", "target": "font-body 13px text-graphite", "why": "Drops the third label voice in the specimen cards."},
+    {"priority": 4, "gain": 1, "where": "src/components/PhoneBand.tsx / src/components/PaperPage.tsx (mobile docked phone wrapper)", "now": "docked phone about 52svh with the first text lines hidden behind it when scrolled (m-14-BAND738.png)", "target": "add scroll-margin-top equal to the docked phone height (about 52svh + 64px header) to each band step so the reading line clears the phone", "why": "Text under the phone cannot be read."},
+    {"priority": 5, "gain": 1, "where": "src/app/globals.css (focus and hover rules) plus capture script", "now": "no captured evidence of hover, pressed or focus states", "target": "capture header language switch, alert dial, toggles and one citation in hover, pressed and focus-visible; keep 2px ring, #ECE8DF in the band", "why": "States cannot be scored without evidence; this is a verification gap, not a known defect."}
+  ],
+  "unverified": [
+    "Focus rings, hover and pressed states on any control",
+    "Reduced-motion render of the band (only the first viewport was provided)",
+    "Keyboard use of citation buttons",
+    "Figures checked at contact-sheet size only",
+    "Live site and a real phone"
+  ]
+}
