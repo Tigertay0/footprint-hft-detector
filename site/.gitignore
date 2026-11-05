@@ -6,3 +6,5 @@ next-env.d.ts
 .design/rounds/*/shots/
 .pages/
 .design/rounds/**/*.png
+# the root .gitignore ignores data/ (watcher database); the site feed is source
+!src/data/

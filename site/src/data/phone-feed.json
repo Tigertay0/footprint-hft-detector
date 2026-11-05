@@ -1,0 +1,2128 @@
+{
+ "date": "2026-10-08",
+ "tickers": [
+  "TSLA",
+  "NVDA",
+  "AAPL",
+  "AMD",
+  "META",
+  "AMZN",
+  "SPY",
+  "QQQ",
+  "TQQQ",
+  "SQQQ",
+  "SOXL",
+  "GME",
+  "AMC",
+  "PLTR",
+  "SOFI",
+  "COIN",
+  "MARA",
+  "RIVN",
+  "HOOD",
+  "NIO"
+ ],
+ "feed": [
+  {
+   "at": "09:55",
+   "ticker": "SOXL",
+   "kind": "EARLY WARNING",
+   "title": "SOXL: possible HFT activity",
+   "body": "09:55 ET, minute 09:54. Score 83/100: volume 3.4 standard deviations above normal, price moved sharply down in 3 minutes, selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "09:55",
+   "ticker": "SQQQ",
+   "kind": "EARLY WARNING",
+   "title": "SQQQ: possible HFT activity",
+   "body": "09:55 ET, minute 09:54. Score 61/100: volume 2.5 standard deviations above normal, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "10:00",
+   "ticker": "RIVN",
+   "kind": "EARLY WARNING",
+   "title": "RIVN: possible HFT activity",
+   "body": "10:00 ET, minute 09:59. Score 60/100: volume 5.3 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "10:02",
+   "ticker": "SOXL",
+   "kind": "CLEARED",
+   "title": "SOXL: warning cleared",
+   "body": "10:02 ET. The 09:54 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "10:02",
+   "ticker": "SQQQ",
+   "kind": "CLEARED",
+   "title": "SQQQ: warning cleared",
+   "body": "10:02 ET. The 09:54 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "10:05",
+   "ticker": "SOFI",
+   "kind": "EARLY WARNING",
+   "title": "SOFI: possible HFT activity",
+   "body": "10:05 ET, minute 10:04. Score 51/100: volume 3.8 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "10:07",
+   "ticker": "RIVN",
+   "kind": "CLEARED",
+   "title": "RIVN: warning cleared",
+   "body": "10:07 ET. The 09:59 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "10:12",
+   "ticker": "NVDA",
+   "kind": "EARLY WARNING",
+   "title": "NVDA: possible HFT activity",
+   "body": "10:12 ET, minute 10:11. Score 57/100: volume 13.8 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "10:12",
+   "ticker": "SOFI",
+   "kind": "CLEARED",
+   "title": "SOFI: warning cleared",
+   "body": "10:12 ET. The 10:04 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "10:15",
+   "ticker": "NIO",
+   "kind": "EARLY WARNING",
+   "title": "NIO: possible HFT activity",
+   "body": "10:15 ET, minute 10:14. Score 54/100: volume 3.7 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "10:19",
+   "ticker": "NVDA",
+   "kind": "CLEARED",
+   "title": "NVDA: warning cleared",
+   "body": "10:19 ET. The 10:11 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "10:22",
+   "ticker": "NIO",
+   "kind": "CLEARED",
+   "title": "NIO: warning cleared",
+   "body": "10:22 ET. The 10:14 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "10:22",
+   "ticker": "TSLA",
+   "kind": "EARLY WARNING",
+   "title": "TSLA: possible HFT activity",
+   "body": "10:22 ET, minute 10:21. Score 62/100: volume 11.3 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "10:24",
+   "ticker": "AMZN",
+   "kind": "EARLY WARNING",
+   "title": "AMZN: possible HFT activity",
+   "body": "10:24 ET, minute 10:23. Score 64/100: volume 10.2 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "10:26",
+   "ticker": "NIO",
+   "kind": "EARLY WARNING",
+   "title": "NIO: possible HFT activity",
+   "body": "10:26 ET, minute 10:25. Score 63/100: volume 3.8 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "10:29",
+   "ticker": "QQQ",
+   "kind": "EARLY WARNING",
+   "title": "QQQ: possible HFT activity",
+   "body": "10:29 ET, minute 10:28. Score 57/100: volume 2.8 standard deviations above normal, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "10:29",
+   "ticker": "TSLA",
+   "kind": "CLEARED",
+   "title": "TSLA: warning cleared",
+   "body": "10:29 ET. The 10:21 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "10:31",
+   "ticker": "AMZN",
+   "kind": "CLEARED",
+   "title": "AMZN: warning cleared",
+   "body": "10:31 ET. The 10:23 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "10:32",
+   "ticker": "AAPL",
+   "kind": "EARLY WARNING",
+   "title": "AAPL: possible HFT activity",
+   "body": "10:32 ET, minute 10:31. Score 73/100: volume 9.1 standard deviations above normal, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "10:32",
+   "ticker": "HOOD",
+   "kind": "EARLY WARNING",
+   "title": "HOOD: possible HFT activity",
+   "body": "10:32 ET, minute 10:31. Score 65/100: volume 15.4 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "10:33",
+   "ticker": "NIO",
+   "kind": "CLEARED",
+   "title": "NIO: warning cleared",
+   "body": "10:33 ET. The 10:25 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "10:36",
+   "ticker": "QQQ",
+   "kind": "CLEARED",
+   "title": "QQQ: warning cleared",
+   "body": "10:36 ET. The 10:28 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "10:39",
+   "ticker": "AAPL",
+   "kind": "CLEARED",
+   "title": "AAPL: warning cleared",
+   "body": "10:39 ET. The 10:31 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "10:39",
+   "ticker": "HOOD",
+   "kind": "CLEARED",
+   "title": "HOOD: warning cleared",
+   "body": "10:39 ET. The 10:31 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "10:45",
+   "ticker": "NVDA",
+   "kind": "EARLY WARNING",
+   "title": "NVDA: possible HFT activity",
+   "body": "10:45 ET, minute 10:44. Score 58/100: volume 15.6 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "10:45",
+   "ticker": "SPY",
+   "kind": "EARLY WARNING",
+   "title": "SPY: possible HFT activity",
+   "body": "10:45 ET, minute 10:44. Score 74/100: volume 9.8 standard deviations above normal, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "10:46",
+   "ticker": "AAPL",
+   "kind": "EARLY WARNING",
+   "title": "AAPL: possible HFT activity",
+   "body": "10:46 ET, minute 10:45. Score 60/100: volume 2.9 standard deviations above normal, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "10:49",
+   "ticker": "SOXL",
+   "kind": "EARLY WARNING",
+   "title": "SOXL: possible HFT activity",
+   "body": "10:49 ET, minute 10:48. Score 76/100: volume 10.2 standard deviations above normal, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "10:52",
+   "ticker": "NVDA",
+   "kind": "CLEARED",
+   "title": "NVDA: warning cleared",
+   "body": "10:52 ET. The 10:44 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "10:52",
+   "ticker": "SPY",
+   "kind": "CLEARED",
+   "title": "SPY: warning cleared",
+   "body": "10:52 ET. The 10:44 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "10:53",
+   "ticker": "AAPL",
+   "kind": "CLEARED",
+   "title": "AAPL: warning cleared",
+   "body": "10:53 ET. The 10:45 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "10:56",
+   "ticker": "SOXL",
+   "kind": "CLEARED",
+   "title": "SOXL: warning cleared",
+   "body": "10:56 ET. The 10:48 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "11:00",
+   "ticker": "META",
+   "kind": "EARLY WARNING",
+   "title": "META: possible HFT activity",
+   "body": "11:00 ET, minute 10:59. Score 54/100: volume 5.0 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "11:00",
+   "ticker": "RIVN",
+   "kind": "ALERT",
+   "title": "RIVN: HFT-like pattern",
+   "body": "11:00 ET. [ELEVATED | score 66/100] 08 Oct 10:54-10:54 ET: trading volume jumped to 2.9 standard deviations above its recent normal. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "11:04",
+   "ticker": "GME",
+   "kind": "EARLY WARNING",
+   "title": "GME: possible HFT activity",
+   "body": "11:04 ET, minute 11:03. Score 57/100: selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "11:07",
+   "ticker": "META",
+   "kind": "CLEARED",
+   "title": "META: warning cleared",
+   "body": "11:07 ET. The 10:59 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "11:10",
+   "ticker": "QQQ",
+   "kind": "EARLY WARNING",
+   "title": "QQQ: possible HFT activity",
+   "body": "11:10 ET, minute 11:09. Score 55/100: volume 2.8 standard deviations above normal, selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "11:11",
+   "ticker": "GME",
+   "kind": "CLEARED",
+   "title": "GME: warning cleared",
+   "body": "11:11 ET. The 11:03 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "11:11",
+   "ticker": "TSLA",
+   "kind": "EARLY WARNING",
+   "title": "TSLA: possible HFT activity",
+   "body": "11:11 ET, minute 11:10. Score 65/100: volume 13.8 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "11:17",
+   "ticker": "QQQ",
+   "kind": "CLEARED",
+   "title": "QQQ: warning cleared",
+   "body": "11:17 ET. The 11:09 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "11:18",
+   "ticker": "TSLA",
+   "kind": "CLEARED",
+   "title": "TSLA: warning cleared",
+   "body": "11:18 ET. The 11:10 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "11:27",
+   "ticker": "TQQQ",
+   "kind": "EARLY WARNING",
+   "title": "TQQQ: possible HFT activity",
+   "body": "11:27 ET, minute 11:26. Score 81/100: volume 11.1 standard deviations above normal, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "11:28",
+   "ticker": "HOOD",
+   "kind": "EARLY WARNING",
+   "title": "HOOD: possible HFT activity",
+   "body": "11:28 ET, minute 11:27. Score 58/100: volume 4.8 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "11:34",
+   "ticker": "NVDA",
+   "kind": "EARLY WARNING",
+   "title": "NVDA: possible HFT activity",
+   "body": "11:34 ET, minute 11:33. Score 82/100: volume 16.3 standard deviations above normal, selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "11:34",
+   "ticker": "QQQ",
+   "kind": "EARLY WARNING",
+   "title": "QQQ: possible HFT activity",
+   "body": "11:34 ET, minute 11:33. Score 68/100: volume 3.6 standard deviations above normal, selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "11:34",
+   "ticker": "TQQQ",
+   "kind": "CLEARED",
+   "title": "TQQQ: warning cleared",
+   "body": "11:34 ET. The 11:26 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "11:35",
+   "ticker": "HOOD",
+   "kind": "CLEARED",
+   "title": "HOOD: warning cleared",
+   "body": "11:35 ET. The 11:27 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "11:41",
+   "ticker": "NVDA",
+   "kind": "CLEARED",
+   "title": "NVDA: warning cleared",
+   "body": "11:41 ET. The 11:33 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "11:41",
+   "ticker": "QQQ",
+   "kind": "CLEARED",
+   "title": "QQQ: warning cleared",
+   "body": "11:41 ET. The 11:33 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "11:42",
+   "ticker": "META",
+   "kind": "EARLY WARNING",
+   "title": "META: possible HFT activity",
+   "body": "11:42 ET, minute 11:41. Score 68/100: price moved sharply down in 3 minutes, selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "11:43",
+   "ticker": "GME",
+   "kind": "EARLY WARNING",
+   "title": "GME: possible HFT activity",
+   "body": "11:43 ET, minute 11:42. Score 96/100: volume 6.0 standard deviations above normal, price moved sharply up in 3 minutes, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "11:47",
+   "ticker": "MARA",
+   "kind": "EARLY WARNING",
+   "title": "MARA: possible HFT activity",
+   "body": "11:47 ET, minute 11:46. Score 65/100: price moved sharply up in 3 minutes, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "11:48",
+   "ticker": "AMC",
+   "kind": "EARLY WARNING",
+   "title": "AMC: possible HFT activity",
+   "body": "11:48 ET, minute 11:47. Score 76/100: volume 3.4 standard deviations above normal, price moved sharply up in 3 minutes, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "11:49",
+   "ticker": "META",
+   "kind": "CONFIRMED",
+   "title": "META: pattern confirmed",
+   "body": "11:49 ET. [ELEVATED | score 68/100] 08 Oct 11:41-11:41 ET: order flow was heavily one-sided (selling). This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "11:50",
+   "ticker": "GME",
+   "kind": "CLEARED",
+   "title": "GME: warning cleared",
+   "body": "11:50 ET. The 11:42 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "11:51",
+   "ticker": "SPY",
+   "kind": "EARLY WARNING",
+   "title": "SPY: possible HFT activity",
+   "body": "11:51 ET, minute 11:50. Score 73/100: volume 8.4 standard deviations above normal, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "11:54",
+   "ticker": "MARA",
+   "kind": "CONFIRMED",
+   "title": "MARA: pattern confirmed",
+   "body": "11:54 ET. [HIGH | score 71/100] 08 Oct 11:46-11:46 ET: order flow was heavily one-sided (buying). This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "11:55",
+   "ticker": "AMC",
+   "kind": "CLEARED",
+   "title": "AMC: warning cleared",
+   "body": "11:55 ET. The 11:47 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "11:56",
+   "ticker": "SOXL",
+   "kind": "EARLY WARNING",
+   "title": "SOXL: possible HFT activity",
+   "body": "11:56 ET, minute 11:55. Score 62/100: volume 3.1 standard deviations above normal, price moved sharply down in 3 minutes, selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "11:58",
+   "ticker": "SPY",
+   "kind": "CLEARED",
+   "title": "SPY: warning cleared",
+   "body": "11:58 ET. The 11:50 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "12:03",
+   "ticker": "SOXL",
+   "kind": "EARLY WARNING",
+   "title": "SOXL: possible HFT activity",
+   "body": "12:03 ET, minute 12:02. Score 85/100: volume 13.4 standard deviations above normal, selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:03",
+   "ticker": "SOXL",
+   "kind": "CONFIRMED",
+   "title": "SOXL: pattern confirmed",
+   "body": "12:03 ET. [HIGH | score 95/100] 08 Oct 11:55-11:55 ET: trading volume jumped to 3.1 standard deviations above its recent normal; the price was pushed sharply down and about 62% of that move reversed within 5 minutes; order flow was heavily one-sided (selling). This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "12:06",
+   "ticker": "META",
+   "kind": "EARLY WARNING",
+   "title": "META: possible HFT activity",
+   "body": "12:06 ET, minute 12:05. Score 65/100: volume 12.2 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:09",
+   "ticker": "QQQ",
+   "kind": "EARLY WARNING",
+   "title": "QQQ: possible HFT activity",
+   "body": "12:09 ET, minute 12:08. Score 72/100: volume 4.1 standard deviations above normal, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:10",
+   "ticker": "SOXL",
+   "kind": "CLEARED",
+   "title": "SOXL: warning cleared",
+   "body": "12:10 ET. The 12:02 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "12:10",
+   "ticker": "TSLA",
+   "kind": "EARLY WARNING",
+   "title": "TSLA: possible HFT activity",
+   "body": "12:10 ET, minute 12:09. Score 62/100: volume 12.8 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:13",
+   "ticker": "META",
+   "kind": "CLEARED",
+   "title": "META: warning cleared",
+   "body": "12:13 ET. The 12:05 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "12:16",
+   "ticker": "QQQ",
+   "kind": "CLEARED",
+   "title": "QQQ: warning cleared",
+   "body": "12:16 ET. The 12:08 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "12:16",
+   "ticker": "RIVN",
+   "kind": "EARLY WARNING",
+   "title": "RIVN: possible HFT activity",
+   "body": "12:16 ET, minute 12:15. Score 55/100: volume 6.9 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:17",
+   "ticker": "TSLA",
+   "kind": "CLEARED",
+   "title": "TSLA: warning cleared",
+   "body": "12:17 ET. The 12:09 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "12:18",
+   "ticker": "AAPL",
+   "kind": "EARLY WARNING",
+   "title": "AAPL: possible HFT activity",
+   "body": "12:18 ET, minute 12:17. Score 84/100: volume 6.1 standard deviations above normal, price moved sharply up in 3 minutes, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:18",
+   "ticker": "COIN",
+   "kind": "EARLY WARNING",
+   "title": "COIN: possible HFT activity",
+   "body": "12:18 ET, minute 12:17. Score 56/100: volume 4.7 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:18",
+   "ticker": "HOOD",
+   "kind": "EARLY WARNING",
+   "title": "HOOD: possible HFT activity",
+   "body": "12:18 ET, minute 12:17. Score 76/100: volume 6.0 standard deviations above normal, price moved sharply up in 3 minutes. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:18",
+   "ticker": "SOFI",
+   "kind": "EARLY WARNING",
+   "title": "SOFI: possible HFT activity",
+   "body": "12:18 ET, minute 12:17. Score 75/100: volume 6.6 standard deviations above normal, price moved sharply up in 3 minutes. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:18",
+   "ticker": "SPY",
+   "kind": "EARLY WARNING",
+   "title": "SPY: possible HFT activity",
+   "body": "12:18 ET, minute 12:17. Score 66/100: volume 11.4 standard deviations above normal, price moved sharply up in 3 minutes. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:18",
+   "ticker": null,
+   "kind": "LIMIT",
+   "title": "Footprint: alert limit reached",
+   "body": "More than 20 warnings in an hour. Further ones are saved and sent together as a digest when the hour allows. Confirmed alerts still come through.",
+   "priority": 3,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:23",
+   "ticker": "AMD",
+   "kind": "ALERT",
+   "title": "AMD: HFT-like pattern",
+   "body": "12:23 ET. [HIGH | score 84/100] 08 Oct 12:17-12:17 ET: trading volume jumped to 2.9 standard deviations above its recent normal; the price was pushed sharply up and about 71% of that move reversed within 5 minutes. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "12:23",
+   "ticker": "AMZN",
+   "kind": "ALERT",
+   "title": "AMZN: HFT-like pattern",
+   "body": "12:23 ET. [HIGH | score 78/100] 08 Oct 12:17-12:17 ET: trading volume jumped to 4.0 standard deviations above its recent normal; the price was pushed sharply up and about 67% of that move reversed within 5 minutes. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "12:23",
+   "ticker": "QQQ",
+   "kind": "ALERT",
+   "title": "QQQ: HFT-like pattern",
+   "body": "12:23 ET. [ELEVATED | score 60/100] 08 Oct 12:17-12:17 ET: the price was pushed sharply up and about 53% of that move reversed within 5 minutes. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "12:23",
+   "ticker": "RIVN",
+   "kind": "CONFIRMED",
+   "title": "RIVN: pattern confirmed",
+   "body": "12:23 ET. [ELEVATED | score 60/100] 08 Oct 12:15-12:17 ET: trading volume jumped to 6.9 standard deviations above its recent normal; the price was pushed sharply up and about 54% of that move reversed within 5 minutes. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "12:25",
+   "ticker": "AAPL",
+   "kind": "CONFIRMED",
+   "title": "AAPL: pattern confirmed",
+   "body": "12:25 ET. [HIGH | score 99/100] 08 Oct 12:17-12:18 ET: trading volume jumped to 6.1 standard deviations above its recent normal; the price was pushed sharply up and about 119% of that move reversed within 5 minutes; order flow was heavily one-sided (buying). This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "12:25",
+   "ticker": "COIN",
+   "kind": "CLEARED",
+   "title": "COIN: warning cleared",
+   "body": "12:25 ET. The 12:17 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "12:25",
+   "ticker": "HOOD",
+   "kind": "CONFIRMED",
+   "title": "HOOD: pattern confirmed",
+   "body": "12:25 ET. [HIGH | score 84/100] 08 Oct 12:17-12:17 ET: trading volume jumped to 6.0 standard deviations above its recent normal; the price was pushed sharply up and about 70% of that move reversed within 5 minutes. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "12:25",
+   "ticker": "SOFI",
+   "kind": "CONFIRMED",
+   "title": "SOFI: pattern confirmed",
+   "body": "12:25 ET. [HIGH | score 87/100] 08 Oct 12:17-12:17 ET: trading volume jumped to 6.6 standard deviations above its recent normal; the price was pushed sharply up and about 88% of that move reversed within 5 minutes. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "12:25",
+   "ticker": "SPY",
+   "kind": "CONFIRMED",
+   "title": "SPY: pattern confirmed",
+   "body": "12:25 ET. [HIGH | score 86/100] 08 Oct 12:17-12:17 ET: trading volume jumped to 11.4 standard deviations above its recent normal; the price was pushed sharply up and about 51% of that move reversed within 5 minutes. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "12:25",
+   "ticker": "SQQQ",
+   "kind": "CONFIRMED",
+   "title": "SQQQ: pattern confirmed",
+   "body": "12:25 ET. [HIGH | score 86/100] 08 Oct 12:17-12:17 ET: trading volume jumped to 7.3 standard deviations above its recent normal; the price was pushed sharply down and about 52% of that move reversed within 5 minutes. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "12:25",
+   "ticker": "TQQQ",
+   "kind": "CONFIRMED",
+   "title": "TQQQ: pattern confirmed",
+   "body": "12:25 ET. [HIGH | score 84/100] 08 Oct 12:17-12:17 ET: trading volume jumped to 7.4 standard deviations above its recent normal; the price was pushed sharply up and about 52% of that move reversed within 5 minutes. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "12:29",
+   "ticker": null,
+   "kind": "DIGEST",
+   "title": "Footprint: warnings held back earlier",
+   "body": "Held back by the hourly limit:\nSQQQ 12:17\nTQQQ 12:17",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:29",
+   "ticker": "NIO",
+   "kind": "EARLY WARNING",
+   "title": "NIO: possible HFT activity",
+   "body": "12:29 ET, minute 12:28. Score 87/100: volume 5.8 standard deviations above normal, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:36",
+   "ticker": "NIO",
+   "kind": "CLEARED",
+   "title": "NIO: warning cleared",
+   "body": "12:36 ET. The 12:28 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "12:43",
+   "ticker": "SQQQ",
+   "kind": "EARLY WARNING",
+   "title": "SQQQ: possible HFT activity",
+   "body": "12:43 ET, minute 12:42. Score 74/100: volume 6.1 standard deviations above normal, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:48",
+   "ticker": "HOOD",
+   "kind": "EARLY WARNING",
+   "title": "HOOD: possible HFT activity",
+   "body": "12:48 ET, minute 12:47. Score 61/100: selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:48",
+   "ticker": "QQQ",
+   "kind": "EARLY WARNING",
+   "title": "QQQ: possible HFT activity",
+   "body": "12:48 ET, minute 12:47. Score 80/100: volume 7.9 standard deviations above normal, selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:49",
+   "ticker": "AMZN",
+   "kind": "EARLY WARNING",
+   "title": "AMZN: possible HFT activity",
+   "body": "12:49 ET, minute 12:48. Score 73/100: volume 4.6 standard deviations above normal, selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:49",
+   "ticker": "NVDA",
+   "kind": "ALERT",
+   "title": "NVDA: HFT-like pattern",
+   "body": "12:49 ET. [ELEVATED | score 67/100] 08 Oct 12:43-12:43 ET: trading volume jumped to 4.8 standard deviations above its recent normal. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "12:49",
+   "ticker": "TQQQ",
+   "kind": "EARLY WARNING",
+   "title": "TQQQ: possible HFT activity",
+   "body": "12:49 ET, minute 12:48. Score 67/100: volume 2.6 standard deviations above normal, price moved sharply down in 3 minutes, selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:50",
+   "ticker": "SOXL",
+   "kind": "EARLY WARNING",
+   "title": "SOXL: possible HFT activity",
+   "body": "12:50 ET, minute 12:49. Score 55/100: price moved sharply down in 3 minutes, selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:50",
+   "ticker": null,
+   "kind": "LIMIT",
+   "title": "Footprint: alert limit reached",
+   "body": "More than 20 warnings in an hour. Further ones are saved and sent together as a digest when the hour allows. Confirmed alerts still come through.",
+   "priority": 3,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:50",
+   "ticker": "SQQQ",
+   "kind": "CLEARED",
+   "title": "SQQQ: warning cleared",
+   "body": "12:50 ET. The 12:42 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "12:54",
+   "ticker": null,
+   "kind": "DIGEST",
+   "title": "Footprint: warnings held back earlier",
+   "body": "Held back by the hourly limit:\nSQQQ 12:49\nTSLA 12:49\nMETA 12:50",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:54",
+   "ticker": "AMD",
+   "kind": "ALERT",
+   "title": "AMD: HFT-like pattern",
+   "body": "12:54 ET. [ELEVATED | score 57/100] 08 Oct 12:48-12:48 ET: the combination of volume, price movement and order flow was statistically unusual for this stock. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "12:54",
+   "ticker": null,
+   "kind": "LIMIT",
+   "title": "Footprint: alert limit reached",
+   "body": "More than 20 warnings in an hour. Further ones are saved and sent together as a digest when the hour allows. Confirmed alerts still come through.",
+   "priority": 3,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:55",
+   "ticker": "HOOD",
+   "kind": "CLEARED",
+   "title": "HOOD: warning cleared",
+   "body": "12:55 ET. The 12:47 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "12:55",
+   "ticker": "NVDA",
+   "kind": "ALERT",
+   "title": "NVDA: HFT-like pattern",
+   "body": "12:55 ET. [ELEVATED | score 66/100] 08 Oct 12:49-12:49 ET: order flow was heavily one-sided (selling). This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "12:55",
+   "ticker": "PLTR",
+   "kind": "ALERT",
+   "title": "PLTR: HFT-like pattern",
+   "body": "12:55 ET. [HIGH | score 83/100] 08 Oct 12:49-12:49 ET: trading volume jumped to 2.9 standard deviations above its recent normal; the price was pushed sharply down and about 69% of that move reversed within 5 minutes. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "12:55",
+   "ticker": "QQQ",
+   "kind": "CLEARED",
+   "title": "QQQ: warning cleared",
+   "body": "12:55 ET. The 12:47 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "12:56",
+   "ticker": "AMZN",
+   "kind": "CONFIRMED",
+   "title": "AMZN: pattern confirmed",
+   "body": "12:56 ET. [HIGH | score 96/100] 08 Oct 12:48-12:50 ET: trading volume jumped to 4.6 standard deviations above its recent normal; the price was pushed sharply down and about 107% of that move reversed within 5 minutes; order flow was heavily one-sided (selling). This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "12:56",
+   "ticker": "TQQQ",
+   "kind": "CLEARED",
+   "title": "TQQQ: warning cleared",
+   "body": "12:56 ET. The 12:48 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "12:57",
+   "ticker": null,
+   "kind": "DIGEST",
+   "title": "Footprint: warnings held back earlier",
+   "body": "Held back by the hourly limit:\nSOFI 12:53\nCOIN 12:54",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "12:57",
+   "ticker": "SOXL",
+   "kind": "CLEARED",
+   "title": "SOXL: warning cleared",
+   "body": "12:57 ET. The 12:49 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "12:57",
+   "ticker": "SQQQ",
+   "kind": "CLEARED",
+   "title": "SQQQ: warning cleared",
+   "body": "12:57 ET. The 12:49 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "12:57",
+   "ticker": "TSLA",
+   "kind": "CLEARED",
+   "title": "TSLA: warning cleared",
+   "body": "12:57 ET. The 12:49 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "12:58",
+   "ticker": "META",
+   "kind": "CONFIRMED",
+   "title": "META: pattern confirmed",
+   "body": "12:58 ET. [HIGH | score 98/100] 08 Oct 12:50-12:50 ET: trading volume jumped to 3.6 standard deviations above its recent normal; the price was pushed sharply down and about 54% of that move reversed within 5 minutes; order flow was heavily one-sided (selling). This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "13:01",
+   "ticker": "SOFI",
+   "kind": "CLEARED",
+   "title": "SOFI: warning cleared",
+   "body": "13:01 ET. The 12:53 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "13:02",
+   "ticker": "COIN",
+   "kind": "CLEARED",
+   "title": "COIN: warning cleared",
+   "body": "13:02 ET. The 12:54 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "13:09",
+   "ticker": "RIVN",
+   "kind": "EARLY WARNING",
+   "title": "RIVN: possible HFT activity",
+   "body": "13:09 ET, minute 13:08. Score 55/100: buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "13:16",
+   "ticker": "RIVN",
+   "kind": "CLEARED",
+   "title": "RIVN: warning cleared",
+   "body": "13:16 ET. The 13:08 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "13:24",
+   "ticker": "AMZN",
+   "kind": "EARLY WARNING",
+   "title": "AMZN: possible HFT activity",
+   "body": "13:24 ET, minute 13:23. Score 69/100: volume 3.7 standard deviations above normal, price moved sharply down in 3 minutes, selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "13:25",
+   "ticker": "PLTR",
+   "kind": "EARLY WARNING",
+   "title": "PLTR: possible HFT activity",
+   "body": "13:25 ET, minute 13:24. Score 75/100: volume 3.2 standard deviations above normal, selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "13:29",
+   "ticker": "GME",
+   "kind": "EARLY WARNING",
+   "title": "GME: possible HFT activity",
+   "body": "13:29 ET, minute 13:28. Score 64/100: volume 4.2 standard deviations above normal, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "13:31",
+   "ticker": "AMZN",
+   "kind": "CLEARED",
+   "title": "AMZN: warning cleared",
+   "body": "13:31 ET. The 13:23 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "13:32",
+   "ticker": "PLTR",
+   "kind": "CLEARED",
+   "title": "PLTR: warning cleared",
+   "body": "13:32 ET. The 13:24 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "13:32",
+   "ticker": "QQQ",
+   "kind": "EARLY WARNING",
+   "title": "QQQ: possible HFT activity",
+   "body": "13:32 ET, minute 13:31. Score 82/100: volume 10.6 standard deviations above normal, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "13:33",
+   "ticker": "META",
+   "kind": "ALERT",
+   "title": "META: HFT-like pattern",
+   "body": "13:33 ET. [ELEVATED | score 67/100] 08 Oct 13:27-13:27 ET: the price was pushed sharply down and about 115% of that move reversed within 5 minutes. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "13:36",
+   "ticker": "GME",
+   "kind": "CLEARED",
+   "title": "GME: warning cleared",
+   "body": "13:36 ET. The 13:28 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "13:39",
+   "ticker": "QQQ",
+   "kind": "CLEARED",
+   "title": "QQQ: warning cleared",
+   "body": "13:39 ET. The 13:31 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "13:40",
+   "ticker": "RIVN",
+   "kind": "EARLY WARNING",
+   "title": "RIVN: possible HFT activity",
+   "body": "13:40 ET, minute 13:39. Score 78/100: volume 3.0 standard deviations above normal, selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "13:47",
+   "ticker": "RIVN",
+   "kind": "CLEARED",
+   "title": "RIVN: warning cleared",
+   "body": "13:47 ET. The 13:39 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "13:50",
+   "ticker": "HOOD",
+   "kind": "EARLY WARNING",
+   "title": "HOOD: possible HFT activity",
+   "body": "13:50 ET, minute 13:49. Score 54/100: selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "13:57",
+   "ticker": "HOOD",
+   "kind": "CLEARED",
+   "title": "HOOD: warning cleared",
+   "body": "13:57 ET. The 13:49 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "14:02",
+   "ticker": "AMD",
+   "kind": "EARLY WARNING",
+   "title": "AMD: possible HFT activity",
+   "body": "14:02 ET, minute 14:01. Score 65/100: volume 8.5 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "14:08",
+   "ticker": "RIVN",
+   "kind": "EARLY WARNING",
+   "title": "RIVN: possible HFT activity",
+   "body": "14:08 ET, minute 14:07. Score 52/100: buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "14:09",
+   "ticker": "AMD",
+   "kind": "CLEARED",
+   "title": "AMD: warning cleared",
+   "body": "14:09 ET. The 14:01 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "14:11",
+   "ticker": "NIO",
+   "kind": "EARLY WARNING",
+   "title": "NIO: possible HFT activity",
+   "body": "14:11 ET, minute 14:10. Score 53/100: buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "14:14",
+   "ticker": "META",
+   "kind": "EARLY WARNING",
+   "title": "META: possible HFT activity",
+   "body": "14:14 ET, minute 14:13. Score 81/100: volume 4.7 standard deviations above normal, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "14:15",
+   "ticker": "RIVN",
+   "kind": "CLEARED",
+   "title": "RIVN: warning cleared",
+   "body": "14:15 ET. The 14:07 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "14:17",
+   "ticker": "SOXL",
+   "kind": "EARLY WARNING",
+   "title": "SOXL: possible HFT activity",
+   "body": "14:17 ET, minute 14:16. Score 52/100: buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "14:17",
+   "ticker": "TQQQ",
+   "kind": "EARLY WARNING",
+   "title": "TQQQ: possible HFT activity",
+   "body": "14:17 ET, minute 14:16. Score 67/100: volume 3.4 standard deviations above normal, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "14:18",
+   "ticker": "AMC",
+   "kind": "EARLY WARNING",
+   "title": "AMC: possible HFT activity",
+   "body": "14:18 ET, minute 14:17. Score 87/100: volume 4.2 standard deviations above normal, price moved sharply down in 3 minutes, selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "14:18",
+   "ticker": "NIO",
+   "kind": "CLEARED",
+   "title": "NIO: warning cleared",
+   "body": "14:18 ET. The 14:10 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "14:21",
+   "ticker": "META",
+   "kind": "CLEARED",
+   "title": "META: warning cleared",
+   "body": "14:21 ET. The 14:13 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "14:24",
+   "ticker": "SOXL",
+   "kind": "CLEARED",
+   "title": "SOXL: warning cleared",
+   "body": "14:24 ET. The 14:16 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "14:24",
+   "ticker": "TQQQ",
+   "kind": "CLEARED",
+   "title": "TQQQ: warning cleared",
+   "body": "14:24 ET. The 14:16 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "14:25",
+   "ticker": "AMC",
+   "kind": "CONFIRMED",
+   "title": "AMC: pattern confirmed",
+   "body": "14:25 ET. [HIGH | score 99/100] 08 Oct 14:17-14:19 ET: trading volume jumped to 4.2 standard deviations above its recent normal; the price was pushed sharply down and about 69% of that move reversed within 5 minutes; order flow was heavily one-sided (selling). This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "14:27",
+   "ticker": "COIN",
+   "kind": "ALERT",
+   "title": "COIN: HFT-like pattern",
+   "body": "14:27 ET. [HIGH | score 71/100] 08 Oct 14:21-14:21 ET: trading volume jumped to 2.8 standard deviations above its recent normal. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "14:41",
+   "ticker": "SOXL",
+   "kind": "EARLY WARNING",
+   "title": "SOXL: possible HFT activity",
+   "body": "14:41 ET, minute 14:40. Score 83/100: volume 20.0 standard deviations above normal, selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "14:45",
+   "ticker": "NIO",
+   "kind": "EARLY WARNING",
+   "title": "NIO: possible HFT activity",
+   "body": "14:45 ET, minute 14:44. Score 55/100: buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "14:47",
+   "ticker": "AMZN",
+   "kind": "EARLY WARNING",
+   "title": "AMZN: possible HFT activity",
+   "body": "14:47 ET, minute 14:46. Score 62/100: volume 7.7 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "14:48",
+   "ticker": "SOXL",
+   "kind": "CLEARED",
+   "title": "SOXL: warning cleared",
+   "body": "14:48 ET. The 14:40 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "14:52",
+   "ticker": "NIO",
+   "kind": "EARLY WARNING",
+   "title": "NIO: possible HFT activity",
+   "body": "14:52 ET, minute 14:51. Score 71/100: volume 5.6 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "14:52",
+   "ticker": "NIO",
+   "kind": "CLEARED",
+   "title": "NIO: warning cleared",
+   "body": "14:52 ET. The 14:44 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "14:54",
+   "ticker": "AMZN",
+   "kind": "CLEARED",
+   "title": "AMZN: warning cleared",
+   "body": "14:54 ET. The 14:46 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "14:55",
+   "ticker": "SPY",
+   "kind": "EARLY WARNING",
+   "title": "SPY: possible HFT activity",
+   "body": "14:55 ET, minute 14:54. Score 67/100: volume 18.6 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "14:58",
+   "ticker": "RIVN",
+   "kind": "ALERT",
+   "title": "RIVN: HFT-like pattern",
+   "body": "14:58 ET. [ELEVATED | score 68/100] 08 Oct 14:52-14:52 ET: the price was pushed sharply up and about 175% of that move reversed within 5 minutes. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "14:59",
+   "ticker": "NIO",
+   "kind": "CLEARED",
+   "title": "NIO: warning cleared",
+   "body": "14:59 ET. The 14:51 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "15:02",
+   "ticker": "SPY",
+   "kind": "CLEARED",
+   "title": "SPY: warning cleared",
+   "body": "15:02 ET. The 14:54 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "15:10",
+   "ticker": "AMD",
+   "kind": "EARLY WARNING",
+   "title": "AMD: possible HFT activity",
+   "body": "15:10 ET, minute 15:09. Score 68/100: volume 2.7 standard deviations above normal, selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "15:17",
+   "ticker": "AMD",
+   "kind": "CLEARED",
+   "title": "AMD: warning cleared",
+   "body": "15:17 ET. The 15:09 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "15:18",
+   "ticker": "COIN",
+   "kind": "EARLY WARNING",
+   "title": "COIN: possible HFT activity",
+   "body": "15:18 ET, minute 15:17. Score 86/100: volume 15.6 standard deviations above normal, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "15:24",
+   "ticker": "NIO",
+   "kind": "EARLY WARNING",
+   "title": "NIO: possible HFT activity",
+   "body": "15:24 ET, minute 15:23. Score 63/100: buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "15:24",
+   "ticker": "SOXL",
+   "kind": "EARLY WARNING",
+   "title": "SOXL: possible HFT activity",
+   "body": "15:24 ET, minute 15:23. Score 65/100: volume 2.5 standard deviations above normal, price moved sharply up in 3 minutes, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "15:24",
+   "ticker": "TSLA",
+   "kind": "EARLY WARNING",
+   "title": "TSLA: possible HFT activity",
+   "body": "15:24 ET, minute 15:23. Score 58/100: volume 2.6 standard deviations above normal, price moved sharply up in 3 minutes, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "15:25",
+   "ticker": "COIN",
+   "kind": "CLEARED",
+   "title": "COIN: warning cleared",
+   "body": "15:25 ET. The 15:17 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "15:25",
+   "ticker": "PLTR",
+   "kind": "EARLY WARNING",
+   "title": "PLTR: possible HFT activity",
+   "body": "15:25 ET, minute 15:24. Score 76/100: volume 3.2 standard deviations above normal, price moved sharply up in 3 minutes, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "15:25",
+   "ticker": "RIVN",
+   "kind": "EARLY WARNING",
+   "title": "RIVN: possible HFT activity",
+   "body": "15:25 ET, minute 15:24. Score 54/100: volume 2.9 standard deviations above normal, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "15:25",
+   "ticker": "SQQQ",
+   "kind": "EARLY WARNING",
+   "title": "SQQQ: possible HFT activity",
+   "body": "15:25 ET, minute 15:24. Score 55/100: volume 5.1 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "15:26",
+   "ticker": "HOOD",
+   "kind": "EARLY WARNING",
+   "title": "HOOD: possible HFT activity",
+   "body": "15:26 ET, minute 15:25. Score 54/100: price moved sharply up in 3 minutes, buying is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "15:29",
+   "ticker": "QQQ",
+   "kind": "ALERT",
+   "title": "QQQ: HFT-like pattern",
+   "body": "15:29 ET. [ELEVATED | score 60/100] 08 Oct 15:23-15:23 ET: order flow was heavily one-sided (buying). This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "15:29",
+   "ticker": "TQQQ",
+   "kind": "ALERT",
+   "title": "TQQQ: HFT-like pattern",
+   "body": "15:29 ET. [ELEVATED | score 59/100] 08 Oct 15:23-15:23 ET: order flow was heavily one-sided (buying). This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "15:31",
+   "ticker": "AMC",
+   "kind": "EARLY WARNING",
+   "title": "AMC: possible HFT activity",
+   "body": "15:31 ET, minute 15:30. Score 59/100: volume 2.6 standard deviations above normal, price moved sharply down in 3 minutes, selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "15:31",
+   "ticker": "META",
+   "kind": "ALERT",
+   "title": "META: HFT-like pattern",
+   "body": "15:31 ET. [ELEVATED | score 69/100] 08 Oct 15:25-15:25 ET: the price was pushed sharply up and about 66% of that move reversed within 5 minutes. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "15:31",
+   "ticker": "NIO",
+   "kind": "CLEARED",
+   "title": "NIO: warning cleared",
+   "body": "15:31 ET. The 15:23 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "15:31",
+   "ticker": "SOXL",
+   "kind": "CONFIRMED",
+   "title": "SOXL: pattern confirmed",
+   "body": "15:31 ET. [HIGH | score 92/100] 08 Oct 15:23-15:23 ET: trading volume jumped to 2.5 standard deviations above its recent normal; the price was pushed sharply up and about 51% of that move reversed within 5 minutes; order flow was heavily one-sided (buying). This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "15:31",
+   "ticker": "TSLA",
+   "kind": "CLEARED",
+   "title": "TSLA: warning cleared",
+   "body": "15:31 ET. The 15:23 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "15:32",
+   "ticker": "PLTR",
+   "kind": "CONFIRMED",
+   "title": "PLTR: pattern confirmed",
+   "body": "15:32 ET. [HIGH | score 98/100] 08 Oct 15:24-15:24 ET: trading volume jumped to 3.2 standard deviations above its recent normal; the price was pushed sharply up and about 66% of that move reversed within 5 minutes; order flow was heavily one-sided (buying). This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "15:32",
+   "ticker": "RIVN",
+   "kind": "CLEARED",
+   "title": "RIVN: warning cleared",
+   "body": "15:32 ET. The 15:24 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "15:32",
+   "ticker": "SQQQ",
+   "kind": "CLEARED",
+   "title": "SQQQ: warning cleared",
+   "body": "15:32 ET. The 15:24 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "15:33",
+   "ticker": "HOOD",
+   "kind": "CONFIRMED",
+   "title": "HOOD: pattern confirmed",
+   "body": "15:33 ET. [HIGH | score 82/100] 08 Oct 15:25-15:25 ET: the price was pushed sharply up and about 81% of that move reversed within 5 minutes; order flow was heavily one-sided (buying). This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "15:35",
+   "ticker": "AAPL",
+   "kind": "ALERT",
+   "title": "AAPL: HFT-like pattern",
+   "body": "15:35 ET. [ELEVATED | score 60/100] 08 Oct 15:29-15:29 ET: trading volume jumped to 4.6 standard deviations above its recent normal. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "15:38",
+   "ticker": "AMC",
+   "kind": "CLEARED",
+   "title": "AMC: warning cleared",
+   "body": "15:38 ET. The 15:30 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "15:41",
+   "ticker": "SPY",
+   "kind": "EARLY WARNING",
+   "title": "SPY: possible HFT activity",
+   "body": "15:41 ET, minute 15:40. Score 67/100: volume 18.2 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "15:48",
+   "ticker": "SPY",
+   "kind": "CLEARED",
+   "title": "SPY: warning cleared",
+   "body": "15:48 ET. The 15:40 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "15:51",
+   "ticker": "COIN",
+   "kind": "ALERT",
+   "title": "COIN: HFT-like pattern",
+   "body": "15:51 ET. [ELEVATED | score 61/100] 08 Oct 15:45-15:45 ET: trading volume jumped to 2.6 standard deviations above its recent normal. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "15:51",
+   "ticker": "SQQQ",
+   "kind": "EARLY WARNING",
+   "title": "SQQQ: possible HFT activity",
+   "body": "15:51 ET, minute 15:50. Score 59/100: volume 5.9 standard deviations above normal. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "15:56",
+   "ticker": "TSLA",
+   "kind": "ALERT",
+   "title": "TSLA: HFT-like pattern",
+   "body": "15:56 ET. [ELEVATED | score 58/100] 08 Oct 15:50-15:50 ET: trading volume jumped to 2.6 standard deviations above its recent normal. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "15:58",
+   "ticker": "COIN",
+   "kind": "ALERT",
+   "title": "COIN: HFT-like pattern",
+   "body": "15:58 ET. [HIGH | score 71/100] 08 Oct 15:52-15:52 ET: trading volume jumped to 2.8 standard deviations above its recent normal. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "15:58",
+   "ticker": "SQQQ",
+   "kind": "CLEARED",
+   "title": "SQQQ: warning cleared",
+   "body": "15:58 ET. The 15:50 warning cleared. The move held instead of reversing. More consistent with genuine buying or selling (for example news) than a push-and-pull pattern.",
+   "priority": 2,
+   "tags": [
+    "white_check_mark"
+   ]
+  },
+  {
+   "at": "16:00",
+   "ticker": "COIN",
+   "kind": "EARLY WARNING",
+   "title": "COIN: possible HFT activity",
+   "body": "16:00 ET, minute 15:59. Score 90/100: volume 4.0 standard deviations above normal, price moved sharply down in 3 minutes, selling is heavily one-sided. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "16:00",
+   "ticker": "HOOD",
+   "kind": "ALERT",
+   "title": "HOOD: HFT-like pattern",
+   "body": "16:00 ET. [HIGH | score 70/100] 08 Oct 15:54-15:54 ET: trading volume jumped to 2.5 standard deviations above its recent normal. This pattern is consistent with fast algorithmic trading. It is a warning sign, not proof of manipulation.",
+   "priority": 5,
+   "tags": [
+    "rotating_light"
+   ]
+  },
+  {
+   "at": "16:00",
+   "ticker": "MARA",
+   "kind": "EARLY WARNING",
+   "title": "MARA: possible HFT activity",
+   "body": "16:00 ET, minute 15:59. Score 65/100: volume 4.3 standard deviations above normal, price moved sharply down in 3 minutes. Watching for a reversal over the next 5 minutes.\nA warning sign, not proof of manipulation.",
+   "priority": 4,
+   "tags": [
+    "warning"
+   ]
+  },
+  {
+   "at": "16:00",
+   "ticker": null,
+   "kind": "SUMMARY",
+   "title": "Footprint: market closed",
+   "body": "Market closed. Today: 87 early warnings, 35 confirmed, 69 cleared.",
+   "priority": 2,
+   "tags": [
+    "zzz"
+   ]
+  }
+ ]
+}
