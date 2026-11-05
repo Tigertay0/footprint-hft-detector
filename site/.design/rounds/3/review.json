@@ -1,0 +1,40 @@
+{
+  "round": 3,
+  "total": 87,
+  "verdict": "REVISE",
+  "cap": null,
+  "scores": [
+    {"category": "Brief and design-system fidelity", "points": 11, "max": 12, "evidence": "Newsprint, Ink, one rust amber, Zodiak display, Night band all hold (sections/d-00-top.png, d-13-BAND600.png). Hero chart rises into the 1440x900 fold with the alert card (chart top y=640). Section headings stay Title Case by design (verbatim paper text), not scored down. Leftover: verdict text on the strategy cards is inconsistent (d-05-s3.png)."},
+    {"category": "Hierarchy and layout", "points": 10, "max": 11, "evidence": "Hero 1-2-3 is clear. The band headline now sits level with the phone column, so the top right is no longer empty, and the statement now left-aligns at x=152 (d-01-statement.png). Still weak: in the pinned band a 300px black void sits between the 12:17 and 12:25 notes (d-15-BAND745.png, y 343-646)."},
+    {"category": "Typography", "points": 7, "max": 7, "evidence": "Zodiak/Sentient plus mono for data, tight tracking, left-aligned body, 18px band paragraphs at 620px measure (d-13-BAND600.png), band headline wraps to two lines with a grey second tone and no orphan in EN. FR headline 'Votre telephone le 8 / octobre.' breaks after '8' (sections-fr/d-13-BAND600.png), minor."},
+    {"category": "Spacing and rhythm", "points": 6, "max": 7, "evidence": "Voids cut from 360-500px to about 300px on desktop (d-15-BAND745.png); mobile gap under the 12:17 note is still about 190px (m-14-BAND738.png). Strategy cards now share a stacked footer but the row-2 cards (md:col-span-3) leave a 70px hole above the verdict on card 4 (d-05-s3.png), and card 1 has a chip where cards 2-4 have plain text."},
+    {"category": "Color and depth", "points": 9, "max": 10, "evidence": "Identity holds at thumbnail size (sheet-d.png): newsprint, ink, rust, near-black band; semantic green/red only for meaning; light-mode shadows soft; --color-amber-night is now a token. Amber is still a small accent inside the band (note times, rail only)."},
+    {"category": "Components and states", "points": 8, "max": 10, "evidence": "Eight restyled 21st.dev pieces; code-review fixes (aria-pressed toggles, language links with aria-current, citation focus handling) improve function but no capture shows focus, hover or pressed, so these are not credited."},
+    {"category": "Anti-slop", "points": 6, "max": 7, "evidence": "No gradients on text, glows, pills or uppercase labels. Remaining: the mono 'One-minute price, illustration' label (d-00-top.png) and mono band times keep a third voice; the phone body has a decorative radial amber/green gradient (Phone.tsx:75) that is barely visible."},
+    {"category": "Motion and interaction", "points": 8, "max": 10, "evidence": "Hero sequence plays in view; reduced-motion fold intact (desktop-fold-reduced.png); pinned scrubbed phone with live counters and different devices by section (sheet-d.png). Not credited: reduced-motion band, hover/pointer states."},
+    {"category": "Responsive", "points": 3, "max": 4, "evidence": "390px (sheet-m.png): no horizontal scroll, hero and headline fit, docked phone with text under it, never empty. Deductions: 190px empty black under notes (m-14-BAND738.png) and the band headline wraps to 3 lines."},
+    {"category": "Memorability", "points": 11, "max": 12, "evidence": "Both user-liked mechanisms read: Round's centred serif hero with the drawing rising (d-00-top.png), two-tone statement (d-01-statement.png), Auxia's cream-to-dark band with a two-tone headline (d-13-BAND600.png). Section treatments differ. The band peak is still diluted by the void between notes."},
+    {"category": "Accessibility and function", "points": 8, "max": 10, "evidence": "clean.md: typecheck, build and static export pass, contrast at least 4.5:1, one h1, skip link; FR page composed. Not credited: captured focus rings, keyboard use of citations, reduced-motion band."}
+  ],
+  "mechanism_verdicts": {
+    "round_serif_hero_with_drawing_rising": "Landed. Chart card top now at y=640 with spike and alert card inside the fold.",
+    "round_two_tone_statement": "Landed and aligned to the page column; the right 30 percent beside it is empty, acceptable for a statement.",
+    "auxia_cream_to_dark_band": "Landed. Rule, header clearance, then headline and phone together. The remaining flaw is spacing between notes, not the cut.",
+    "auxia_two_tone_headline": "Landed in EN; in FR the first tone breaks after '8'."
+  },
+  "fixes": [
+    {"priority": 1, "gain": 2, "where": "src/components/PaperPage.tsx lines 171 and 185 (band step wrappers)", "now": "className 'flex min-h-[40vh] flex-col justify-center md:min-h-[50vh]'", "target": "'flex min-h-[24vh] flex-col justify-center md:min-h-[30vh]'", "why": "300px desktop and 190px mobile voids between notes drop to about 150px; the scrub stays readable because data-t anchors still track each block."},
+    {"priority": 2, "gain": 1, "where": "src/components/StrategyGrid.tsx lines 119-131 (evidence line and footer)", "now": "evidence line is mt-3 text, footer is mt-auto flex-col with a chip only for visible cards, so card 1 and 5 carry a chip and 2-4 plain text; card 4 has a 70px hole above its verdict", "target": "render the verdict as the same 13px element on every card (chip style for yes, plain for no) inside a fixed 'min-h-[28px]' row, and put the evidence line inside the footer stack so mt-auto lifts both together", "why": "Equal things equal; removes the hole in row 2."},
+    {"priority": 3, "gain": 1, "where": "src/components/PaperPage.tsx line 163 (band headline p) and src/content/i18n.ts (FR band headline)", "now": "FR first tone 'Votre telephone le 8 octobre.' wraps as 'Votre telephone le 8 / octobre.'", "target": "join '8 octobre' with a non-breaking space (U+00A0) in the FR string so the break falls before '8'", "why": "Removes the date split; the existing nbsp pattern is already used elsewhere."},
+    {"priority": 4, "gain": 1, "where": "src/components/ui/Mark.tsx line 29 or the tokenize output in src/content/tokenize.ts", "now": "band paragraph shows extra gaps around the highlighted '4.9 per stock per trading day' (d-13-BAND600.png, d-14 FR); likely whitespace emitted beside the Mark span", "target": "trim leading/trailing whitespace inside Mark children and keep a single normal space outside the element", "why": "Uneven word spacing breaks the reading line next to the marked figure."},
+    {"priority": 5, "gain": 1, "where": "src/components/PaperPage.tsx lines 185-190 (band note cards)", "now": "note times and rail are the only amber in the band", "target": "give the active note a 2px left border in var(--color-amber-night) when its data-t is current", "why": "Makes the amber the recalled colour moment of the band and links note to phone."},
+    {"priority": 6, "gain": 1, "where": "src/components/Hero.tsx / src/components/HeroFigure.tsx (label 'One-minute price, illustration')", "now": "font-mono 13px label", "target": "font-body 14px text-graphite, same as the abstract label", "why": "Drops the third label voice."}
+  ],
+  "unverified": [
+    "Focus rings, hover and pressed states on any control",
+    "Reduced-motion render of the band (only the first viewport was provided)",
+    "Keyboard use of citation buttons",
+    "Figures checked at contact-sheet size only",
+    "Live site and a real phone"
+  ]
+}

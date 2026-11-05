@@ -1,0 +1,16 @@
+// Cloudflare Workers static-assets deployment for research.adetayo.dev.
+// Build and package first (the site reads the paper from ../research, so it is built locally):
+//   npm run build && python scripts/package_pages.py && npx wrangler@4.157.0 deploy
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "research-adetayo-dev",
+  "compatibility_date": "2026-11-03",
+  "assets": {
+    "directory": "./.pages",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "routes": [{ "pattern": "research.adetayo.dev", "custom_domain": true }],
+  "workers_dev": false,
+  "preview_urls": false
+}

@@ -1,0 +1,321 @@
+@import "tailwindcss";
+
+@theme {
+  --color-newsprint: #f3efe6;
+  --color-paper: #fbf9f4;
+  --color-pulp: #eae5d9;
+  --color-ink: #17181c;
+  --color-graphite: #4e4f55;
+  --color-ash: #62625d;
+  --color-rule: #d8d2c4;
+  --color-amber: #d9480f;
+  --color-amber-ink: #a63a0c;
+  --color-amber-night: #f08a5d;
+  --color-held: #246a41;
+  --color-urgent: #c92a2a;
+  --color-night: #111214;
+  --color-night-2: #1b1c20;
+  --color-night-text: #ece8df;
+  --color-night-text-2: #a9a69e;
+  --color-night-rule: #2e2f34;
+
+  --font-display: var(--font-zodiak), "Times New Roman", serif;
+  --font-serif: var(--font-sentient), Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-mono), ui-monospace, "Cascadia Mono", monospace;
+  --font-phone: system-ui, Roboto, "Segoe UI", sans-serif;
+
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --shadow-card: 0 1px 2px rgba(23, 24, 28, 0.05), 0 8px 24px rgba(23, 24, 28, 0.06);
+  --shadow-lift: 0 1px 2px rgba(23, 24, 28, 0.05), 0 12px 32px rgba(23, 24, 28, 0.1);
+  --shadow-phone: 0 32px 80px rgba(0, 0, 0, 0.5);
+}
+
+:root {
+  color-scheme: light;
+  --header-h: 64px;
+}
+
+html {
+  background: var(--color-newsprint);
+  color: var(--color-ink);
+  scroll-padding-top: calc(var(--header-h) + 24px);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  line-height: 1.62;
+  background: var(--color-newsprint);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (min-width: 768px) {
+  body {
+    font-size: 19px;
+  }
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-amber) 24%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.on-night :focus-visible {
+  outline-color: var(--color-night-text);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Paper text */
+.prose-paper p + p {
+  margin-top: 24px;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(32px, 3.4vw, 48px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+@media (min-width: 768px) {
+  .h3 {
+    font-size: 22px;
+  }
+}
+
+.link {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--color-rule);
+  transition: text-decoration-color 200ms var(--ease-premium);
+}
+
+.link:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Citation trigger: dotted underline */
+.cite {
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--color-graphite);
+  cursor: help;
+}
+
+.on-night .cite {
+  text-decoration-color: var(--color-night-text-2);
+}
+
+/* Hero graph paper (adapted from rmahammad's Animated Grid, 21st.dev id 29376: CSS only, slow drift, radial fade) */
+.graph-paper {
+  position: absolute;
+  inset: -96px;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--color-rule) 90%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--color-rule) 90%, transparent) 1px, transparent 1px),
+    linear-gradient(to right, color-mix(in srgb, var(--color-rule) 45%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--color-rule) 45%, transparent) 1px, transparent 1px);
+  background-size: 96px 96px, 96px 96px, 24px 24px, 24px 24px;
+  mask-image: radial-gradient(ellipse 70% 65% at 60% 40%, black 30%, transparent 75%);
+  animation: grid-drift 40s linear infinite;
+  will-change: transform;
+}
+
+.graph-paper[data-paused="true"] {
+  animation-play-state: paused;
+}
+
+@keyframes grid-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(96px, 96px, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .graph-paper {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Strategy card loops: play only while the card is hovered, focused or active (centred on touch) */
+.loop {
+  animation-play-state: paused;
+}
+
+.strategy[data-active="true"] .loop,
+.strategy:hover .loop,
+.strategy:focus-within .loop {
+  animation-play-state: running;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loop {
+    animation: none !important;
+  }
+}
+
+@keyframes draw {
+  0% { stroke-dashoffset: 0; }
+  12% { stroke-dashoffset: 100; }
+  62% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes blink {
+  0%, 40% { opacity: 0.75; }
+  52%, 82% { opacity: 0; }
+  100% { opacity: 0.75; }
+}
+
+@keyframes flood {
+  0% { transform: translateX(0); opacity: 0.6; }
+  100% { transform: translateX(-24px); opacity: 0.15; }
+}
+
+/* Buttons. Primary adapted from ddoemonn's Press Depth (21st.dev id 23547): a key with a darker lower edge
+   that presses down 1px. Small controls are paper keys from the same family. */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 24px;
+  border-radius: 8px;
+  background: var(--color-ink);
+  color: var(--color-newsprint);
+  font-weight: 500;
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.5), 0 1px 2px rgba(23, 24, 28, 0.2);
+  transition: background-color 150ms var(--ease-premium), transform 120ms var(--ease-premium), box-shadow 120ms var(--ease-premium);
+}
+
+.btn-primary:hover {
+  background: #2a2b30;
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.5), 0 0 0 rgba(23, 24, 28, 0);
+}
+
+.btn-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 8px;
+  border: 1px solid var(--color-rule);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  box-shadow: inset 0 -2px 0 rgba(23, 24, 28, 0.07);
+  transition: border-color 150ms var(--ease-premium), background-color 150ms var(--ease-premium), transform 120ms var(--ease-premium), box-shadow 120ms var(--ease-premium);
+}
+
+.btn-key:hover {
+  border-color: var(--color-graphite);
+}
+
+.btn-key:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+.btn-key[aria-pressed="true"] {
+  border-color: var(--color-ink);
+  background: var(--color-ink);
+  color: var(--color-newsprint);
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.btn-key--sm {
+  height: 32px;
+  padding: 0 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary,
+  .btn-key {
+    transition: background-color 150ms, border-color 150ms;
+  }
+  .btn-primary:active,
+  .btn-key:active {
+    transform: none;
+  }
+}
+
+/* Arrow link: the arrow moves 2px toward where it goes */
+.arrow-link svg {
+  transition: transform 200ms var(--ease-premium);
+}
+
+.arrow-link:hover svg {
+  transform: translate(2px, 2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow-link:hover svg {
+    transform: none;
+  }
+}
+
+/* Band replay notes: the time and text brighten when the note holds the reading line */
+.band-time {
+  color: var(--color-night-text-2);
+  transition: color 300ms var(--ease-premium);
+}
+
+.band-text {
+  color: var(--color-night-text-2);
+  transition: color 300ms var(--ease-premium);
+}
+
+[data-active="true"] .band-time {
+  color: var(--color-amber-night);
+}
+
+[data-active="true"] .band-text {
+  color: var(--color-night-text);
+}
